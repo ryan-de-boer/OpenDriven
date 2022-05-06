@@ -355,7 +355,7 @@ namespace OpenDriven.Commands
       var activePoint = ((EnvDTE.TextSelection)s_dte.ActiveDocument.Selection).ActivePoint;
       string textLine = activePoint.CreateEditPoint().GetLines(activePoint.Line, activePoint.Line + 1);
 
-      string text2 = activePoint.CreateEditPoint().GetLines(1, activePoint.Line + 1);
+      string text2 = activePoint.CreateEditPoint().GetLines(1, activePoint.Line + 2);
 
       string testWithNamespace = ExtractNamespaceTest(text2);
 

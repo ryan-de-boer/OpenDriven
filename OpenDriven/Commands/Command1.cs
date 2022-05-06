@@ -112,7 +112,7 @@ namespace OpenDriven.Commands
       //     string testWithNamespace = DebugCommand.InputBox("Test with namespace", "");
 
       var activePoint = ((EnvDTE.TextSelection)s_dte.ActiveDocument.Selection).ActivePoint;
-      string text2 = activePoint.CreateEditPoint().GetLines(1, activePoint.Line + 1);
+      string text2 = activePoint.CreateEditPoint().GetLines(1, activePoint.Line + 2);
 
       string testWithNamespace = DebugCommand.ExtractNamespaceTest(text2);
 
