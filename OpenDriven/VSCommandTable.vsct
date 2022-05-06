@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Include href="KnownImageIds.vsct" />
+  <Include href="VSGlobals.vsct" />
+
+  <Commands package="OpenDriven">
+    <Groups>
+      <Group guid="OpenDriven" id="MyGroup" priority="0x0600">
+        <Parent guid="VSMainMenu" id="Tools" />
+      </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" priority="0x0098">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+      </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" priority="0x0099">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+    </Groups>
+
+    <!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+    <Buttons>
+      <Button guid="OpenDriven" id="MyCommand" priority="0x0100" type="Button">
+        <Parent guid="OpenDriven" id="MyGroup" />
+        <Icon guid="guidImages2" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Configure Open Driven</ButtonText>
+          <LocCanonicalName>.OpenDriven.MyCommand</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidCommand1" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Run Test(s)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidDebugCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Debug Test(s)</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Commands\Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages1" href="Commands\Resources\DebugCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages2" href="Commands\Resources\OptionsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+    </Bitmaps>
+  </Commands>
+
+  <CommandPlacements>
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="OpenDriven" value="{9fa6c0c7-f9fa-4eec-92e4-cce58209226a}">
+      <IDSymbol name="MyGroup" value="0x0001" />
+      <IDSymbol name="MyCommand" value="0x0100" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{c5bccf32-96d1-4e8a-93b2-a9c56ea803d9}" name="guidOpenDrivenPackageCmdSet">
+      <IDSymbol value="4128" name="EditorContextMenuGroup" />
+      <IDSymbol value="256" name="cmdidCommand1" />
+      <IDSymbol value="257" name="cmdidDebugCommand" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{d65142af-d736-4826-8f66-fb14c9c96117}" name="guidImages">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{07308648-1c6b-4281-b48d-019867018e0f}" name="guidImages1">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+
+
+    <GuidSymbol value="{5073aeb6-8505-4b2c-b192-6d82c83d9029}" name="guidImages2">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
