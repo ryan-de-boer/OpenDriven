@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,6 +46,9 @@ namespace OpenDriven.Commands
       var menuCommandID = new CommandID(CommandSet, CommandId);
       var menuItem = new MenuCommand(this.Execute, menuCommandID);
       commandService.AddCommand(menuItem);
+
+      //ChangeMyCommand(4129, true);
+      //ChangeMyCommand(4177, false);
     }
 
     /// <summary>
@@ -116,6 +120,8 @@ namespace OpenDriven.Commands
 
       string testWithNamespace = DebugCommand.ExtractNamespaceTest(text2);
 
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{fileName} /test={testWithNamespace}");
+
       DebugCommand.Build(_selectedProject1);
 
       var processStartInfo = new ProcessStartInfo
@@ -156,6 +162,11 @@ namespace OpenDriven.Commands
 
       if (output.Contains("Failed: 0,"))
       {
+        File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "PASS");
+
+        ChangeMyCommand(4129, true);
+        ChangeMyCommand(4177, false);
+
         VsShellUtilities.ShowMessageBox(
           this.package,
           "PASS",
@@ -166,6 +177,11 @@ namespace OpenDriven.Commands
       }
       else
       {
+        File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "FAIL");
+
+        ChangeMyCommand(4129, false);
+        ChangeMyCommand(4177, true);
+
         VsShellUtilities.ShowMessageBox(
           this.package,
           "FAIL",
@@ -187,5 +203,36 @@ namespace OpenDriven.Commands
       //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
       //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
     }
+
+
+
+
+    public const string guidOpenDrivenPackageCmdSet = "c5bccf32-96d1-4e8a-93b2-a9c56ea803d9";
+    public bool ChangeMyCommand(int cmdID, bool enableCmd)
+    {
+      bool cmdUpdated = false;
+      System.IServiceProvider serviceProvider = package as System.IServiceProvider;
+      OleMenuCommandService mcs = (OleMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
+      var newCmdID = new CommandID(new Guid(guidOpenDrivenPackageCmdSet), cmdID);
+      MenuCommand mc = mcs.FindCommand(newCmdID);
+      if (mc != null)
+      {
+        //mc.CommandChanged += Mc_CommandChanged;
+        //        mc.Enabled = enableCmd;
+        //        mc.Visible = enableCmd;
+        mc.Visible = enableCmd;
+        cmdUpdated = true;
+      }
+      return cmdUpdated;
+    }
+
+    //private void Mc_CommandChanged(object sender, EventArgs e)
+    //{
+    //  var myCommand = sender as MenuCommand;
+    //  myCommand.Visible = false;
+
+    //}
   }
+
 }
+

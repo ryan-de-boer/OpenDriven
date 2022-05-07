@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.IO;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,14 +49,39 @@ namespace OpenDriven.Commands
       var menuItem = new MenuCommand(this.Execute, menuCommandID);
       commandService.AddCommand(menuItem);
 
+ //     RestartServer();
+    }
+    static SocketServer server;
+    private void RestartServer()
+    {
+      return;
+
       try
       {
         if (server != null)
         {
+          server.Received -= Server_Received;
           server.Stop();
         }
 
-        server = new SocketServer();
+        bool portOk = false;
+
+
+          for (int i = 9004; i < 100000 && !portOk; ++i)
+          {
+            try
+            {
+              server = new SocketServer(i);
+              portOk = true;
+              break;
+            }
+            catch (SocketException)
+            {
+              // in use
+            }
+          }
+       
+
         server.Received += Server_Received;
         server.Start();
       }
@@ -70,7 +96,6 @@ namespace OpenDriven.Commands
             OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
       }
     }
-    static SocketServer server;
 
     /// <summary>
     /// Gets the instance of the command.
@@ -350,6 +375,7 @@ namespace OpenDriven.Commands
       //string testWithNamespace = InputBox("Test with namespace", "");
 
       s_eventOccurred = false;
+ //     RestartServer();
 
 
       var activePoint = ((EnvDTE.TextSelection)s_dte.ActiveDocument.Selection).ActivePoint;
@@ -359,8 +385,11 @@ namespace OpenDriven.Commands
 
       string testWithNamespace = ExtractNamespaceTest(text2);
 
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName} /test={testWithNamespace} --debug-agent");
+
       Build(_selectedProject1);
 
+ //     File.WriteAllText(@"C:\Program Files\OpenDriven\nunit-console-3.8\port.txt", server.m_port.ToString());
 
       System.Diagnostics.Process cmd = new System.Diagnostics.Process();
       cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
@@ -369,13 +398,22 @@ namespace OpenDriven.Commands
       cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
       cmd.Start();
 
-      while (!s_eventOccurred)
+      //while (!s_eventOccurred)
+      //{
+      //  System.Threading.Thread.Sleep(10);
+      //}
+
+      while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
       {
-        System.Threading.Thread.Sleep(10);
+        System.Threading.Thread.Sleep(500);
       }
- //     WaitAttach(s_dte);
+
+
+      //     WaitAttach(s_dte);
 
       Attach(s_dte);
+
+      File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
 
       // Show a message box to prove we were here
       //VsShellUtilities.ShowMessageBox(

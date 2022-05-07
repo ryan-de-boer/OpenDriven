@@ -7,6 +7,17 @@
   <Include href="VSGlobals.vsct" />
 
   <Commands package="OpenDriven">
+
+    <Menus>
+      <Menu guid="guidOpenDrivenPackageCmdSet" id="Toolbar" type="Toolbar">
+        <CommandFlag>DefaultDocked</CommandFlag>
+        <Strings>
+          <ButtonText>Open Driven Toolbar</ButtonText>
+          <CommandName>Open Driven Toolbar</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+    
     <Groups>
       <Group guid="OpenDriven" id="MyGroup" priority="0x0600">
         <Parent guid="VSMainMenu" id="Tools" />
@@ -16,6 +27,9 @@
       </Group>
       <Group guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" priority="0x0099">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet" id="ToolbarGroup" priority="0x0000">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="Toolbar" />
       </Group>
     </Groups>
 
@@ -44,11 +58,33 @@
           <ButtonText>Debug Test(s)</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidToolbarTestCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidImages" id="bmpPic2" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <Strings>
+          <ButtonText>Invoke ToolbarTestCommand</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidToolbarCommand2" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <Strings>
+          <ButtonText>Invoke ToolbarCommand2</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     <Bitmaps>
       <Bitmap guid="guidImages" href="Commands\Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages1" href="Commands\Resources\DebugCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages2" href="Commands\Resources\OptionsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages3" href="Commands\Resources\ToolbarTestCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages4" href="Commands\Resources\ToolbarCommand2.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
@@ -65,6 +101,10 @@
       <IDSymbol value="4128" name="EditorContextMenuGroup" />
       <IDSymbol value="256" name="cmdidCommand1" />
       <IDSymbol value="257" name="cmdidDebugCommand" />
+      <IDSymbol value="4129" name="cmdidToolbarTestCommand" />
+      <IDSymbol name="Toolbar" value="0x1000" />
+      <IDSymbol name="ToolbarGroup" value="0x1050" />
+      <IDSymbol value="4177" name="cmdidToolbarCommand2" />
     </GuidSymbol>
   
     <GuidSymbol value="{d65142af-d736-4826-8f66-fb14c9c96117}" name="guidImages">
@@ -87,6 +127,24 @@
 
 
     <GuidSymbol value="{5073aeb6-8505-4b2c-b192-6d82c83d9029}" name="guidImages2">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{260618dd-2a75-4fcc-9b22-f81799f19273}" name="guidImages3">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{b5c6b537-5999-408a-8927-8978cd90f42e}" name="guidImages4">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

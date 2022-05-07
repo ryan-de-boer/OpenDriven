@@ -21,8 +21,15 @@ namespace OpenDriven.Commands
 
   public sealed class SocketServer : IDisposable //: IIpcServer
   {
-    public const int PORT = 9004;
-    private readonly UdpClient server = new UdpClient(PORT);
+    public SocketServer(int port)
+    {
+      m_port = port;
+      server = new UdpClient(m_port);
+    }
+    public int m_port = 9004;
+    //public const int PORT = 9004;
+    //private readonly UdpClient server = new UdpClient(PORT);
+    private readonly UdpClient server;
 
     void IDisposable.Dispose()
     {
