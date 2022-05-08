@@ -36,12 +36,12 @@
     <!--This section defines the elements the user can interact with, like a menu command or a button
         or combo box in a toolbar. -->
     <Buttons>
-      <Button guid="OpenDriven" id="MyCommand" priority="0x0100" type="Button">
+      <Button guid="OpenDriven" id="ConfigureCommand" priority="0x0100" type="Button">
         <Parent guid="OpenDriven" id="MyGroup" />
         <Icon guid="guidImages2" id="bmpPic1" />
         <Strings>
           <ButtonText>Configure Open Driven</ButtonText>
-          <LocCanonicalName>.OpenDriven.MyCommand</LocCanonicalName>
+          <LocCanonicalName>.OpenDriven.Configure</LocCanonicalName>
         </Strings>
       </Button>
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidCommand1" priority="0x0100" type="Button">
@@ -49,6 +49,7 @@
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
           <ButtonText>Run Test(s)</ButtonText>
+          <LocCanonicalName>.OpenDriven.RunTests</LocCanonicalName>
         </Strings>
       </Button>
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidDebugCommand" priority="0x0100" type="Button">
@@ -56,6 +57,7 @@
         <Icon guid="guidImages1" id="bmpPic1" />
         <Strings>
           <ButtonText>Debug Test(s)</ButtonText>
+          <LocCanonicalName>.OpenDriven.DebugTests</LocCanonicalName>
         </Strings>
       </Button>
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidToolbarTestCommand" priority="0x0100" type="Button">
@@ -65,7 +67,8 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
         <Strings>
-          <ButtonText>Invoke ToolbarTestCommand</ButtonText>
+          <ButtonText>Open Test Report (passed)</ButtonText>
+          <LocCanonicalName>.OpenDriven.OpenTestReportPassed</LocCanonicalName>
         </Strings>
       </Button>
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidToolbarCommand2" priority="0x0100" type="Button">
@@ -75,7 +78,38 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
         <Strings>
-          <ButtonText>Invoke ToolbarCommand2</ButtonText>
+          <ButtonText>Open Test Report (failed)</ButtonText>
+          <LocCanonicalName>.OpenDriven.OpenTestReportFailed</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidToolbarRunLastCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Run Last Test</ButtonText>
+          <LocCanonicalName>.OpenDriven.RunLastTest</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidToolbarDebugLastCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Debug Last Test</ButtonText>
+          <LocCanonicalName>.OpenDriven.DebugLastTest</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidRunFileTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" />
+        <Icon guid="guidImages7" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Invoke RunFileTestsCommand</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidDebugFileTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" />
+        <Icon guid="guidImages8" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Invoke DebugFileTestsCommand</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -85,6 +119,10 @@
       <Bitmap guid="guidImages2" href="Commands\Resources\OptionsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages3" href="Commands\Resources\ToolbarTestCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages4" href="Commands\Resources\ToolbarCommand2.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages5" href="Commands\Resources\ToolbarRunLastCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages6" href="Commands\Resources\ToolbarDebugLastCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages7" href="Commands\Resources\RunFileTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages8" href="Commands\Resources\DebugFileTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
@@ -94,7 +132,7 @@
   <Symbols>
     <GuidSymbol name="OpenDriven" value="{9fa6c0c7-f9fa-4eec-92e4-cce58209226a}">
       <IDSymbol name="MyGroup" value="0x0001" />
-      <IDSymbol name="MyCommand" value="0x0100" />
+      <IDSymbol name="ConfigureCommand" value="0x0100" />
     </GuidSymbol>
   
     <GuidSymbol value="{c5bccf32-96d1-4e8a-93b2-a9c56ea803d9}" name="guidOpenDrivenPackageCmdSet">
@@ -105,6 +143,10 @@
       <IDSymbol name="Toolbar" value="0x1000" />
       <IDSymbol name="ToolbarGroup" value="0x1050" />
       <IDSymbol value="4177" name="cmdidToolbarCommand2" />
+      <IDSymbol value="4178" name="cmdidToolbarRunLastCommand" />
+      <IDSymbol value="4179" name="cmdidToolbarDebugLastCommand" />
+      <IDSymbol value="4180" name="cmdidRunFileTestsCommand" />
+      <IDSymbol value="4181" name="cmdidDebugFileTestsCommand" />
     </GuidSymbol>
   
     <GuidSymbol value="{d65142af-d736-4826-8f66-fb14c9c96117}" name="guidImages">
@@ -145,6 +187,42 @@
     </GuidSymbol>
   
     <GuidSymbol value="{b5c6b537-5999-408a-8927-8978cd90f42e}" name="guidImages4">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{f4cbb13d-c291-4005-adeb-48d03357f33c}" name="guidImages5">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{fd6367ca-2302-4f53-a81a-a807c7a0d7ff}" name="guidImages6">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{bd19acc3-46d9-41d5-bbb1-51f7ee79b81c}" name="guidImages7">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{6333bd8b-d41d-4f58-b085-a197581c526a}" name="guidImages8">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

@@ -1,7 +1,7 @@
 ﻿namespace OpenDriven
 {
-  [Command(PackageIds.MyCommand)]
-  internal sealed class MyCommand : BaseCommand<MyCommand>
+  [Command(PackageIds.ConfigureCommand)]
+  internal sealed class ConfigureCommand : BaseCommand<ConfigureCommand>
   {
     protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
     {

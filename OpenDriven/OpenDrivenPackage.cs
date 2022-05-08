@@ -30,14 +30,14 @@ namespace OpenDriven
 
     protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
     {
-      DebugCommand.s_dte = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE));
-      Command1.s_dte = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE));
+      DebugTestsCommand.s_dte = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE));
+      RunTestsCommand.s_dte = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE));
 
       await this.RegisterCommandsAsync();
-        await OpenDriven.Commands.Command1.InitializeAsync(this);
-        await OpenDriven.Commands.DebugCommand.InitializeAsync(this);
-        await OpenDriven.Commands.ToolbarTestCommand.InitializeAsync(this);
-        await OpenDriven.Commands.ToolbarCommand2.InitializeAsync(this);
+        await OpenDriven.Commands.RunTestsCommand.InitializeAsync(this);
+        await OpenDriven.Commands.DebugTestsCommand.InitializeAsync(this);
+        await OpenDriven.Commands.ToolbarOpenReportPassedCommand.InitializeAsync(this);
+        await OpenDriven.Commands.ToolbarOpenReportFailedCommand.InitializeAsync(this);
 
 
       bool doPass = false;
@@ -88,6 +88,10 @@ namespace OpenDriven
         //        mc.Visible = enableCmd;
         mc.Visible = doFail;
       }
+        await OpenDriven.Commands.ToolbarRunLastCommand.InitializeAsync(this);
+        await OpenDriven.Commands.ToolbarDebugLastCommand.InitializeAsync(this);
+        await OpenDriven.Commands.RunFileTestsCommand.InitializeAsync(this);
+        await OpenDriven.Commands.DebugFileTestsCommand.InitializeAsync(this);
       
 
 

@@ -17,7 +17,7 @@ namespace OpenDriven.Commands
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class DebugCommand
+  internal sealed class DebugTestsCommand
   {
     /// <summary>
     /// Command ID.
@@ -35,12 +35,12 @@ namespace OpenDriven.Commands
     private readonly AsyncPackage package;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DebugCommand"/> class.
+    /// Initializes a new instance of the <see cref="DebugTestsCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
     /// </summary>
     /// <param name="package">Owner package, not null.</param>
     /// <param name="commandService">Command service to add command to, not null.</param>
-    private DebugCommand(AsyncPackage package, OleMenuCommandService commandService)
+    private DebugTestsCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
       this.package = package ?? throw new ArgumentNullException(nameof(package));
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -51,56 +51,57 @@ namespace OpenDriven.Commands
 
  //     RestartServer();
     }
-    static SocketServer server;
-    private void RestartServer()
-    {
-      return;
+    
+    //static SocketServer server;
+    //private void RestartServer()
+    //{
+    //  return;
 
-      try
-      {
-        if (server != null)
-        {
-          server.Received -= Server_Received;
-          server.Stop();
-        }
+    //  try
+    //  {
+    //    if (server != null)
+    //    {
+    //      server.Received -= Server_Received;
+    //      server.Stop();
+    //    }
 
-        bool portOk = false;
+    //    bool portOk = false;
 
 
-          for (int i = 9004; i < 100000 && !portOk; ++i)
-          {
-            try
-            {
-              server = new SocketServer(i);
-              portOk = true;
-              break;
-            }
-            catch (SocketException)
-            {
-              // in use
-            }
-          }
+    //      for (int i = 9004; i < 100000 && !portOk; ++i)
+    //      {
+    //        try
+    //        {
+    //          server = new SocketServer(i);
+    //          portOk = true;
+    //          break;
+    //        }
+    //        catch (SocketException)
+    //        {
+    //          // in use
+    //        }
+    //      }
        
 
-        server.Received += Server_Received;
-        server.Start();
-      }
-      catch (Exception ex)
-      {
-        VsShellUtilities.ShowMessageBox(
-            this.package,
-            ex.ToString(),
-            "Error loading server",
-            OLEMSGICON.OLEMSGICON_INFO,
-            OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-      }
-    }
+    //    server.Received += Server_Received;
+    //    server.Start();
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    VsShellUtilities.ShowMessageBox(
+    //        this.package,
+    //        ex.ToString(),
+    //        "Error loading server",
+    //        OLEMSGICON.OLEMSGICON_INFO,
+    //        OLEMSGBUTTON.OLEMSGBUTTON_OK,
+    //        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+    //  }
+    //}
 
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static DebugCommand Instance
+    public static DebugTestsCommand Instance
     {
       get;
       private set;
@@ -128,7 +129,7 @@ namespace OpenDriven.Commands
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
       OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-      Instance = new DebugCommand(package, commandService);
+      Instance = new DebugTestsCommand(package, commandService);
     }
 
     public static EnvDTE.DTE s_dte;
@@ -217,11 +218,11 @@ namespace OpenDriven.Commands
       //}
     }
 
-    private static void Server_Received(object sender, DataReceivedEventArgs e)
-    {
-      string msg = $"{DateTimeOffset.Now.ToString()} Received: {e.Data}";
-      s_eventOccurred = true;
-    }
+    //private static void Server_Received(object sender, DataReceivedEventArgs e)
+    //{
+    //  string msg = $"{DateTimeOffset.Now.ToString()} Received: {e.Data}";
+    //  s_eventOccurred = true;
+    //}
 
 
 
@@ -385,7 +386,13 @@ namespace OpenDriven.Commands
 
       string testWithNamespace = ExtractNamespaceTest(text2);
 
-      File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName} /test={testWithNamespace} --debug-agent");
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName}|{testWithNamespace}");
+
+      if (File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
+      {
+        File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
+      }
+
 
       Build(_selectedProject1);
 
@@ -393,6 +400,7 @@ namespace OpenDriven.Commands
 
       System.Diagnostics.Process cmd = new System.Diagnostics.Process();
       cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
+      cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
       cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
       cmd.StartInfo.CreateNoWindow = true;
       cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";

@@ -12,12 +12,12 @@ namespace OpenDriven.Commands
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class ToolbarTestCommand
+  internal sealed class ToolbarOpenReportFailedCommand
   {
     /// <summary>
     /// Command ID.
     /// </summary>
-    public const int CommandId = 4129;
+    public const int CommandId = 4177;
 
     /// <summary>
     /// Command menu group (command set GUID).
@@ -29,23 +29,22 @@ namespace OpenDriven.Commands
     /// </summary>
     private readonly AsyncPackage package;
 
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="ToolbarTestCommand"/> class.
+    /// Initializes a new instance of the <see cref="ToolbarOpenReportFailedCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
     /// </summary>
     /// <param name="package">Owner package, not null.</param>
     /// <param name="commandService">Command service to add command to, not null.</param>
-    private ToolbarTestCommand(AsyncPackage package, OleMenuCommandService commandService)
+    private ToolbarOpenReportFailedCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
-      ThreadHelper.ThrowIfNotOnUIThread();
       this.package = package ?? throw new ArgumentNullException(nameof(package));
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
       var menuCommandID = new CommandID(CommandSet, CommandId);
       var menuItem = new MenuCommand(this.Execute, menuCommandID);
       commandService.AddCommand(menuItem);
-      m_menuItem = menuItem;
+      //m_menuItem = menuItem;
+
 
       //System.IServiceProvider serviceProvider = package as System.IServiceProvider;
       //OleMenuCommandService mcs = serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -62,34 +61,18 @@ namespace OpenDriven.Commands
 
 
 
-      //   DebugCommand.s_dte.Events.DocumentEvents.DocumentOpened += DocumentEvents_DocumentOpened;
-      //  DebugCommand.s_dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;
+      //      DebugCommand.s_dte.Events.SolutionEvents.
+      //DebugCommand.s_dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;
 
-      //Thread thread = new Thread(() => 
-      //{
-      //  while (true)
-      //  {
-      //    if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTestResult.txt"))
-      //    {
-      //      if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "PASS")
-      //      {
-      //        m_menuItem.Visible = true;
-      //      }
-      //    }
-      //    System.Threading.Thread.Sleep(1000);
-      //  }
-      //});
-      //thread.IsBackground = true;
-      //thread.Start();
     }
 
-   // OleMenuCommand m_menuItem;
+    OleMenuCommand m_menuItem;
 
     private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
     {
       if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTestResult.txt"))
       {
-        if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "PASS")
+        if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "FAIL")
         {
           m_menuItem.Visible = true;
         }
@@ -100,7 +83,7 @@ namespace OpenDriven.Commands
     //{
     //  if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTestResult.txt"))
     //  {
-    //    if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "PASS")
+    //    if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "FAIL")
     //    {
     //      m_menuItem.Visible = true;
     //    }
@@ -109,20 +92,21 @@ namespace OpenDriven.Commands
 
     private void DTEEvents_OnStartupComplete()
     {
- 
+
     }
 
-    MenuCommand m_menuItem;
+ //   MenuCommand m_menuItem;
 
     private void SolutionEvents_Opened()
     {
 
     }
 
+
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static ToolbarTestCommand Instance
+    public static ToolbarOpenReportFailedCommand Instance
     {
       get;
       private set;
@@ -145,12 +129,12 @@ namespace OpenDriven.Commands
     /// <param name="package">Owner package, not null.</param>
     public static async Task InitializeAsync(AsyncPackage package)
     {
-      // Switch to the main thread - the call to AddCommand in ToolbarTestCommand's constructor requires
+      // Switch to the main thread - the call to AddCommand in ToolbarCommand2's constructor requires
       // the UI thread.
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
       OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-      Instance = new ToolbarTestCommand(package, commandService);
+      Instance = new ToolbarOpenReportFailedCommand(package, commandService);
     }
 
     /// <summary>
@@ -164,16 +148,18 @@ namespace OpenDriven.Commands
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-      string title = "ToolbarTestCommand";
+      string title = "ToolbarCommand2";
 
-      // Show a message box to prove we were here
-      VsShellUtilities.ShowMessageBox(
-          this.package,
-          message,
-          title,
-          OLEMSGICON.OLEMSGICON_INFO,
-          OLEMSGBUTTON.OLEMSGBUTTON_OK,
-          OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      ToolbarOpenReportPassedCommand.OpenTestReport();
+
+      //// Show a message box to prove we were here
+      //VsShellUtilities.ShowMessageBox(
+      //    this.package,
+      //    message,
+      //    title,
+      //    OLEMSGICON.OLEMSGICON_INFO,
+      //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+      //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
     }
   }
 }

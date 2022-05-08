@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,12 +11,12 @@ namespace OpenDriven.Commands
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class ToolbarCommand2
+  internal sealed class RunFileTestsCommand
   {
     /// <summary>
     /// Command ID.
     /// </summary>
-    public const int CommandId = 4177;
+    public const int CommandId = 4180;
 
     /// <summary>
     /// Command menu group (command set GUID).
@@ -30,12 +29,12 @@ namespace OpenDriven.Commands
     private readonly AsyncPackage package;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ToolbarCommand2"/> class.
+    /// Initializes a new instance of the <see cref="RunFileTestsCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
     /// </summary>
     /// <param name="package">Owner package, not null.</param>
     /// <param name="commandService">Command service to add command to, not null.</param>
-    private ToolbarCommand2(AsyncPackage package, OleMenuCommandService commandService)
+    private RunFileTestsCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
       this.package = package ?? throw new ArgumentNullException(nameof(package));
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -43,70 +42,12 @@ namespace OpenDriven.Commands
       var menuCommandID = new CommandID(CommandSet, CommandId);
       var menuItem = new MenuCommand(this.Execute, menuCommandID);
       commandService.AddCommand(menuItem);
-      //m_menuItem = menuItem;
-
-
-      //System.IServiceProvider serviceProvider = package as System.IServiceProvider;
-      //OleMenuCommandService mcs = serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-      //if (null != mcs)
-      //{
-      //  // Create the command for the menu item.
-      //  CommandID menuCommandID = new CommandID(CommandSet, CommandId);
-      //  var menuItem = new OleMenuCommand(Execute, menuCommandID);
-      //  menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus; ;
-      //  mcs.AddCommand(menuItem);
-      //  m_menuItem = menuItem;
-      //}
-
-
-
-
-      //      DebugCommand.s_dte.Events.SolutionEvents.
-      //DebugCommand.s_dte.Events.SolutionEvents.Opened += SolutionEvents_Opened;
-
     }
-
-    OleMenuCommand m_menuItem;
-
-    private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
-    {
-      if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTestResult.txt"))
-      {
-        if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "FAIL")
-        {
-          m_menuItem.Visible = true;
-        }
-      }
-    }
-
-    //private void DocumentEvents_DocumentOpened(EnvDTE.Document Document)
-    //{
-    //  if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTestResult.txt"))
-    //  {
-    //    if (File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt") == "FAIL")
-    //    {
-    //      m_menuItem.Visible = true;
-    //    }
-    //  }
-    //}
-
-    private void DTEEvents_OnStartupComplete()
-    {
-
-    }
-
- //   MenuCommand m_menuItem;
-
-    private void SolutionEvents_Opened()
-    {
-
-    }
-
 
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static ToolbarCommand2 Instance
+    public static RunFileTestsCommand Instance
     {
       get;
       private set;
@@ -129,12 +70,12 @@ namespace OpenDriven.Commands
     /// <param name="package">Owner package, not null.</param>
     public static async Task InitializeAsync(AsyncPackage package)
     {
-      // Switch to the main thread - the call to AddCommand in ToolbarCommand2's constructor requires
+      // Switch to the main thread - the call to AddCommand in RunFileTestsCommand's constructor requires
       // the UI thread.
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
       OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-      Instance = new ToolbarCommand2(package, commandService);
+      Instance = new RunFileTestsCommand(package, commandService);
     }
 
     /// <summary>
@@ -148,7 +89,22 @@ namespace OpenDriven.Commands
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-      string title = "ToolbarCommand2";
+      string title = "RunFileTestsCommand";
+
+      EnvDTE.Project _selectedProject1 = null;
+      string fileName = "";
+      Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;
+      if (_projects.Length != 0 && _projects != null)
+      {
+        EnvDTE.Project _selectedProject = _projects.GetValue(0) as EnvDTE.Project;
+        _selectedProject1 = _selectedProject;
+        //get the project path
+
+        fileName = DebugTestsCommand.GetAssemblyPath(_selectedProject);
+
+      }
+
+
 
       // Show a message box to prove we were here
       VsShellUtilities.ShowMessageBox(

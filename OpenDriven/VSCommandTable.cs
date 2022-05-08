@@ -32,6 +32,18 @@ namespace OpenDriven
 
         public const string guidImages4String = "b5c6b537-5999-408a-8927-8978cd90f42e";
         public static Guid guidImages4 = new Guid(guidImages4String);
+
+        public const string guidImages5String = "f4cbb13d-c291-4005-adeb-48d03357f33c";
+        public static Guid guidImages5 = new Guid(guidImages5String);
+
+        public const string guidImages6String = "fd6367ca-2302-4f53-a81a-a807c7a0d7ff";
+        public static Guid guidImages6 = new Guid(guidImages6String);
+
+        public const string guidImages7String = "bd19acc3-46d9-41d5-bbb1-51f7ee79b81c";
+        public static Guid guidImages7 = new Guid(guidImages7String);
+
+        public const string guidImages8String = "6333bd8b-d41d-4f58-b085-a197581c526a";
+        public static Guid guidImages8 = new Guid(guidImages8String);
     }
     /// <summary>
     /// Helper class that encapsulates all CommandIDs uses across VS Package.
@@ -39,7 +51,7 @@ namespace OpenDriven
     internal sealed partial class PackageIds
     {
         public const int MyGroup = 0x0001;
-        public const int MyCommand = 0x0100;
+        public const int ConfigureCommand = 0x0100;
         public const int EditorContextMenuGroup = 0x1020;
         public const int cmdidCommand1 = 0x0100;
         public const int cmdidDebugCommand = 0x0101;
@@ -47,6 +59,58 @@ namespace OpenDriven
         public const int Toolbar = 0x1000;
         public const int ToolbarGroup = 0x1050;
         public const int cmdidToolbarCommand2 = 0x1051;
+        public const int cmdidToolbarRunLastCommand = 0x1052;
+        public const int cmdidToolbarDebugLastCommand = 0x1053;
+        public const int cmdidRunFileTestsCommand = 0x1054;
+        public const int cmdidDebugFileTestsCommand = 0x1055;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
+        public const int bmpPic1 = 0x0001;
+        public const int bmpPic2 = 0x0002;
+        public const int bmpPicSearch = 0x0003;
+        public const int bmpPicX = 0x0004;
+        public const int bmpPicArrows = 0x0005;
+        public const int bmpPicStrikethrough = 0x0006;
         public const int bmpPic1 = 0x0001;
         public const int bmpPic2 = 0x0002;
         public const int bmpPicSearch = 0x0003;
