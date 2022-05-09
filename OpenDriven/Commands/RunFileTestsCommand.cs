@@ -1,8 +1,13 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using EnvDTE;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,8 +45,41 @@ namespace OpenDriven.Commands
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
       var menuCommandID = new CommandID(CommandSet, CommandId);
-      var menuItem = new MenuCommand(this.Execute, menuCommandID);
+      //     var menuItem = new MenuCommand(this.Execute, menuCommandID);
+
+      var menuItem = new OleMenuCommand(this.Execute, menuCommandID);
+      menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
+
       commandService.AddCommand(menuItem);
+    }
+
+    private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
+    {
+      // get the menu that fired the event
+      var menuCommand = sender as OleMenuCommand;
+      if (menuCommand != null)
+      {
+        // start by assuming that the menu will not be shown
+        menuCommand.Visible = false;
+        menuCommand.Enabled = false;
+
+        IVsHierarchy hierarchy = null;
+        uint itemid = VSConstants.VSITEMID_NIL;
+
+        if (!IsSingleProjectItemSelection(out hierarchy, out itemid)) return;
+        // Get the file path
+        string itemFullPath = null;
+        ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
+
+        // then check if the file is named '*cs'
+        bool isCs = itemFullPath.EndsWith(".cs");
+
+        // if not leave the menu hidden
+        if (!isCs) return;
+
+        menuCommand.Visible = true;
+        menuCommand.Enabled = true;
+      }
     }
 
     /// <summary>
@@ -78,6 +116,67 @@ namespace OpenDriven.Commands
       Instance = new RunFileTestsCommand(package, commandService);
     }
 
+    public static bool IsSingleProjectItemSelection(out IVsHierarchy hierarchy, out uint itemid)
+    {
+      hierarchy = null;
+      itemid = VSConstants.VSITEMID_NIL;
+      int hr = VSConstants.S_OK;
+
+      var monitorSelection = Package.GetGlobalService(typeof(SVsShellMonitorSelection)) as IVsMonitorSelection;
+      var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
+      if (monitorSelection == null || solution == null)
+      {
+        return false;
+      }
+
+      IVsMultiItemSelect multiItemSelect = null;
+      IntPtr hierarchyPtr = IntPtr.Zero;
+      IntPtr selectionContainerPtr = IntPtr.Zero;
+
+      try
+      {
+        hr = monitorSelection.GetCurrentSelection(out hierarchyPtr, out itemid, out multiItemSelect, out selectionContainerPtr);
+
+        if (ErrorHandler.Failed(hr) || hierarchyPtr == IntPtr.Zero || itemid == VSConstants.VSITEMID_NIL)
+        {
+          // there is no selection
+          return false;
+        }
+
+        // multiple items are selected
+        if (multiItemSelect != null) return false;
+
+        // there is a hierarchy root node selected, thus it is not a single item inside a project
+
+        if (itemid == VSConstants.VSITEMID_ROOT) return false;
+
+        hierarchy = Marshal.GetObjectForIUnknown(hierarchyPtr) as IVsHierarchy;
+        if (hierarchy == null) return false;
+
+        Guid guidProjectID = Guid.Empty;
+
+        if (ErrorHandler.Failed(solution.GetGuidOfProject(hierarchy, out guidProjectID)))
+        {
+          return false; // hierarchy is not a project inside the Solution if it does not have a ProjectID Guid
+        }
+
+        // if we got this far then there is a single project item selected
+        return true;
+      }
+      finally
+      {
+        if (selectionContainerPtr != IntPtr.Zero)
+        {
+          Marshal.Release(selectionContainerPtr);
+        }
+
+        if (hierarchyPtr != IntPtr.Zero)
+        {
+          Marshal.Release(hierarchyPtr);
+        }
+      }
+    }
+
     /// <summary>
     /// This function is the callback used to execute the command when the menu item is clicked.
     /// See the constructor to see how the menu item is associated with this function using
@@ -105,15 +204,133 @@ namespace OpenDriven.Commands
       }
 
 
+      IVsHierarchy hierarchy = null;
+      uint itemid = VSConstants.VSITEMID_NIL;
+
+      if (!IsSingleProjectItemSelection(out hierarchy, out itemid)) return;
+      // Get the file path
+      string itemFullPath = null;
+      ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
+
+
+      string classWithNamespace = DebugTestsCommand.ExtractNamespaceClass(File.ReadAllText(itemFullPath));
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{fileName}|{classWithNamespace}");
+
+      DebugTestsCommand.Build(_selectedProject1);
+
+
+      var processStartInfo = new ProcessStartInfo
+      {
+        FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe",
+        Arguments = $"{fileName} /test={classWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2",
+        WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8",
+        RedirectStandardOutput = true,
+        UseShellExecute = false,
+        CreateNoWindow = true,
+      };
+      var process = System.Diagnostics.Process.Start(processStartInfo);
+      var output = process.StandardOutput.ReadToEnd();
+      process.WaitForExit();
+
+      Window window = DebugTestsCommand.s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+      OutputWindow outputWindow = (OutputWindow)window.Object;
+      EnvDTE.OutputWindowPane owp;
+      bool found = false;
+      foreach (EnvDTE.OutputWindowPane x in outputWindow.OutputWindowPanes)
+      {
+        if (x.Name == "Test Output")
+        {
+          x.Activate();
+          x.Clear();
+          x.OutputString(output);
+          found = true;
+          break;
+        }
+      }
+      if (!found)
+      {
+        owp = outputWindow.OutputWindowPanes.Add("Test Output");
+        owp.OutputString(output);
+      }
+
+      HtmlReportCreator.ParseUnitTestResultsFolder("C:\\Program Files\\OpenDriven");
+
+      if (output.Contains("Failed: 0,"))
+      {
+        File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "PASS");
+
+        ChangeMyCommand(4129, true);
+        ChangeMyCommand(4177, false);
+
+        PassDialog dialog = new PassDialog();
+        dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+        dialog.Show();
+
+        //VsShellUtilities.ShowMessageBox(
+        //  this.package,
+        //  "PASS",
+        //  "Test Result",
+        //  OLEMSGICON.OLEMSGICON_INFO,
+        //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
+        //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      }
+      else
+      {
+        File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "FAIL");
+
+        ChangeMyCommand(4129, false);
+        ChangeMyCommand(4177, true);
+
+
+
+        FailDialog dialog = new FailDialog();
+        dialog.ErrorTextBox.Text = RunTestsCommand.GetError();
+        dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+        dialog.Show();
+
+        //VsShellUtilities.ShowMessageBox(
+        //  this.package,
+        //  "FAIL",
+        //  "Test Result",
+        //  OLEMSGICON.OLEMSGICON_CRITICAL,
+        //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
+        //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      }
+
+      int a = 1;
+      a++;
+
+
 
       // Show a message box to prove we were here
-      VsShellUtilities.ShowMessageBox(
-          this.package,
-          message,
-          title,
-          OLEMSGICON.OLEMSGICON_INFO,
-          OLEMSGBUTTON.OLEMSGBUTTON_OK,
-          OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      //VsShellUtilities.ShowMessageBox(
+      //    this.package,
+      //    message+"\r\n"+ itemFullPath,
+      //    title,
+      //    OLEMSGICON.OLEMSGICON_INFO,
+      //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+      //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+    }
+
+    public const string guidOpenDrivenPackageCmdSet = "c5bccf32-96d1-4e8a-93b2-a9c56ea803d9";
+    public bool ChangeMyCommand(int cmdID, bool enableCmd)
+    {
+      bool cmdUpdated = false;
+      System.IServiceProvider serviceProvider = package as System.IServiceProvider;
+      OleMenuCommandService mcs = (OleMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
+      var newCmdID = new CommandID(new Guid(guidOpenDrivenPackageCmdSet), cmdID);
+      MenuCommand mc = mcs.FindCommand(newCmdID);
+      if (mc != null)
+      {
+        //mc.CommandChanged += Mc_CommandChanged;
+        //        mc.Enabled = enableCmd;
+        //        mc.Visible = enableCmd;
+        mc.Visible = enableCmd;
+        cmdUpdated = true;
+      }
+      return cmdUpdated;
     }
   }
+
+
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,8 +42,41 @@ namespace OpenDriven.Commands
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
       var menuCommandID = new CommandID(CommandSet, CommandId);
-      var menuItem = new MenuCommand(this.Execute, menuCommandID);
+      //      var menuItem = new MenuCommand(this.Execute, menuCommandID);
+
+      var menuItem = new OleMenuCommand(this.Execute, menuCommandID);
+      menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
+
       commandService.AddCommand(menuItem);
+    }
+
+    private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
+    {
+      // get the menu that fired the event
+      var menuCommand = sender as OleMenuCommand;
+      if (menuCommand != null)
+      {
+        // start by assuming that the menu will not be shown
+        menuCommand.Visible = false;
+        menuCommand.Enabled = false;
+
+        IVsHierarchy hierarchy = null;
+        uint itemid = VSConstants.VSITEMID_NIL;
+
+        if (!RunFileTestsCommand.IsSingleProjectItemSelection(out hierarchy, out itemid)) return;
+        // Get the file path
+        string itemFullPath = null;
+        ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
+
+        // then check if the file is named '*cs'
+        bool isCs = itemFullPath.EndsWith(".cs");
+
+        // if not leave the menu hidden
+        if (!isCs) return;
+
+        menuCommand.Visible = true;
+        menuCommand.Enabled = true;
+      }
     }
 
     /// <summary>
@@ -91,14 +126,63 @@ namespace OpenDriven.Commands
       string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
       string title = "DebugFileTestsCommand";
 
-      // Show a message box to prove we were here
-      VsShellUtilities.ShowMessageBox(
-          this.package,
-          message,
-          title,
-          OLEMSGICON.OLEMSGICON_INFO,
-          OLEMSGBUTTON.OLEMSGBUTTON_OK,
-          OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      EnvDTE.Project _selectedProject1 = null;
+      string fileName = "";
+      Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;
+      if (_projects.Length != 0 && _projects != null)
+      {
+        EnvDTE.Project _selectedProject = _projects.GetValue(0) as EnvDTE.Project;
+        _selectedProject1 = _selectedProject;
+        //get the project path
+
+        fileName = DebugTestsCommand.GetAssemblyPath(_selectedProject);
+
+      }
+
+      IVsHierarchy hierarchy = null;
+      uint itemid = VSConstants.VSITEMID_NIL;
+
+      if (!RunFileTestsCommand.IsSingleProjectItemSelection(out hierarchy, out itemid)) return;
+      // Get the file path
+      string itemFullPath = null;
+      ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
+
+
+      string classWithNamespace = DebugTestsCommand.ExtractNamespaceClass(File.ReadAllText(itemFullPath));
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName}|{classWithNamespace}");
+
+      if (File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
+      {
+        File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
+      }
+
+      DebugTestsCommand.Build(_selectedProject1);
+
+      System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+      cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
+      cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
+      cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+      cmd.StartInfo.CreateNoWindow = true;
+      cmd.StartInfo.Arguments = $"{fileName} /test={classWithNamespace} --debug-agent";
+      cmd.Start();
+
+      while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
+      {
+        System.Threading.Thread.Sleep(500);
+      }
+
+      DebugTestsCommand.Attach(DebugTestsCommand.s_dte);
+
+      File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
+
+      //// Show a message box to prove we were here
+      //VsShellUtilities.ShowMessageBox(
+      //    this.package,
+      //    message,
+      //    title,
+      //    OLEMSGICON.OLEMSGICON_INFO,
+      //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+      //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
     }
   }
 }

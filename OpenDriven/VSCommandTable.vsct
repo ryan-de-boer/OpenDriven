@@ -25,11 +25,11 @@
       <Group guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" priority="0x0098">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
       </Group>
-      <Group guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" priority="0x0099">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
-      </Group>
       <Group guid="guidOpenDrivenPackageCmdSet" id="ToolbarGroup" priority="0x0000">
         <Parent guid="guidOpenDrivenPackageCmdSet" id="Toolbar" />
+      </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet" id="ItemMenuGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
     </Groups>
 
@@ -99,17 +99,21 @@
         </Strings>
       </Button>
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidRunFileTestsCommand" priority="0x0100" type="Button">
-        <Parent guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" />
-        <Icon guid="guidImages7" id="bmpPic1" />
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ItemMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Invoke RunFileTestsCommand</ButtonText>
+          <ButtonText>Run Test(s)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidDebugFileTestsCommand" priority="0x0100" type="Button">
-        <Parent guid="guidOpenDrivenPackageCmdSet" id="EditorContextMenuGroup" />
-        <Icon guid="guidImages8" id="bmpPic1" />
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ItemMenuGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Invoke DebugFileTestsCommand</ButtonText>
+          <ButtonText>Debug Test(s)</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -137,6 +141,8 @@
   
     <GuidSymbol value="{c5bccf32-96d1-4e8a-93b2-a9c56ea803d9}" name="guidOpenDrivenPackageCmdSet">
       <IDSymbol value="4128" name="EditorContextMenuGroup" />
+      <IDSymbol value="4130" name="ItemMenuGroup" />
+      
       <IDSymbol value="256" name="cmdidCommand1" />
       <IDSymbol value="257" name="cmdidDebugCommand" />
       <IDSymbol value="4129" name="cmdidToolbarTestCommand" />

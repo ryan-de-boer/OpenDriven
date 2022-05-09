@@ -88,7 +88,15 @@ namespace OpenDriven
         //        mc.Visible = enableCmd;
         mc.Visible = doFail;
       }
-        await OpenDriven.Commands.ToolbarRunLastCommand.InitializeAsync(this);
+
+      //cmdID = 4180;
+      //newCmdID = new CommandID(new Guid(guidOpenDrivenPackageCmdSet), cmdID);
+      //if (mc != null)
+      //{
+      //  mc.bef
+      //}
+
+      await OpenDriven.Commands.ToolbarRunLastCommand.InitializeAsync(this);
         await OpenDriven.Commands.ToolbarDebugLastCommand.InitializeAsync(this);
         await OpenDriven.Commands.RunFileTestsCommand.InitializeAsync(this);
         await OpenDriven.Commands.DebugFileTestsCommand.InitializeAsync(this);
