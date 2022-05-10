@@ -12,17 +12,17 @@ namespace OpenDriven.Commands
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class ToolbarDebugLastCommand
+  internal sealed class DebugProjectTestsCommand
   {
     /// <summary>
     /// Command ID.
     /// </summary>
-    public const int CommandId = 4179;
+    public const int CommandId = 4129;
 
     /// <summary>
     /// Command menu group (command set GUID).
     /// </summary>
-    public static readonly Guid CommandSet = new Guid("c5bccf32-96d1-4e8a-93b2-a9c56ea803d9");
+    public static readonly Guid CommandSet = new Guid("23807277-b10c-4815-af55-28c7a85ddc34");
 
     /// <summary>
     /// VS Package that provides this command, not null.
@@ -30,12 +30,12 @@ namespace OpenDriven.Commands
     private readonly AsyncPackage package;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ToolbarDebugLastCommand"/> class.
+    /// Initializes a new instance of the <see cref="DebugProjectTestsCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
     /// </summary>
     /// <param name="package">Owner package, not null.</param>
     /// <param name="commandService">Command service to add command to, not null.</param>
-    private ToolbarDebugLastCommand(AsyncPackage package, OleMenuCommandService commandService)
+    private DebugProjectTestsCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
       this.package = package ?? throw new ArgumentNullException(nameof(package));
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -48,7 +48,7 @@ namespace OpenDriven.Commands
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static ToolbarDebugLastCommand Instance
+    public static DebugProjectTestsCommand Instance
     {
       get;
       private set;
@@ -71,12 +71,12 @@ namespace OpenDriven.Commands
     /// <param name="package">Owner package, not null.</param>
     public static async Task InitializeAsync(AsyncPackage package)
     {
-      // Switch to the main thread - the call to AddCommand in ToolbarDebugLastCommand's constructor requires
+      // Switch to the main thread - the call to AddCommand in DebugProjectTestsCommand's constructor requires
       // the UI thread.
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
       OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-      Instance = new ToolbarDebugLastCommand(package, commandService);
+      Instance = new DebugProjectTestsCommand(package, commandService);
     }
 
     /// <summary>
@@ -90,59 +90,23 @@ namespace OpenDriven.Commands
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-      string title = "ToolbarDebugLastCommand";
+      string title = "DebugProjectTestsCommand";
 
       string fileName = "";
-      string testWithNamespace = "";
-      if (File.Exists(@"C:\Program Files\OpenDriven\LastDebugTest.txt"))
-      {
-        // $"{fileName}|{testWithNamespace}"
-        string[] tokens = File.ReadAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt").Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-        fileName = tokens[0];
-        testWithNamespace = tokens[1];
-      }
-      else
-      {
-        // Show a message box to prove we were here
-        VsShellUtilities.ShowMessageBox(
-            this.package,
-            "No last debug test found",
-            title,
-            OLEMSGICON.OLEMSGICON_INFO,
-            OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-        return;
-      }
-      if (fileName == "" || testWithNamespace == "")
-      {
-        // Show a message box to prove we were here
-        VsShellUtilities.ShowMessageBox(
-            this.package,
-            "Could not find last debug test",
-            title,
-            OLEMSGICON.OLEMSGICON_INFO,
-            OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-        return;
-      }
-
       EnvDTE.Project _selectedProject1 = null;
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;
       if (_projects.Length != 0 && _projects != null)
       {
-        string filePart = Path.GetFileName(fileName);
-        for (int i = 0; i < _projects.Length; ++i)
-        {
-          EnvDTE.Project p = _projects.GetValue(i) as EnvDTE.Project;
-          string pfileName = DebugTestsCommand.GetAssemblyPath(p);
-          if (pfileName.Contains(filePart))
-          {
-            _selectedProject1 = p;
-          }
-        }
+        EnvDTE.Project _selectedProject = _projects.GetValue(0) as EnvDTE.Project;
+        _selectedProject1 = _selectedProject;
+        //get the project path
+
+        fileName = DebugTestsCommand.GetAssemblyPath(_selectedProject);
+
       }
+
+
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName}|_PROJECT_");
 
       if (File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
       {
@@ -156,11 +120,7 @@ namespace OpenDriven.Commands
       cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
       cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
       cmd.StartInfo.CreateNoWindow = true;
-      cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
-      if (testWithNamespace == "_PROJECT_")
-      {
-        cmd.StartInfo.Arguments = $"{fileName} --debug-agent";
-      }
+      cmd.StartInfo.Arguments = $"{fileName} --debug-agent";
       cmd.Start();
 
       while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
@@ -171,6 +131,7 @@ namespace OpenDriven.Commands
       DebugTestsCommand.Attach(DebugTestsCommand.s_dte);
 
       File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
+
 
 
       //// Show a message box to prove we were here

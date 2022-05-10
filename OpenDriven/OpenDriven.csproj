@@ -46,7 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\DebugFileTestsCommand.cs" />
+    <Compile Include="Commands\DebugProjectTestsCommand.cs" />
     <Compile Include="Commands\RunFileTestsCommand.cs" />
+    <Compile Include="Commands\RunProjectTestsCommand.cs" />
     <Compile Include="Commands\RunTestsCommand.cs" />
     <Compile Include="Commands\DebugTestsCommand.cs" />
     <Compile Include="Commands\ToolbarOpenReportFailedCommand.cs" />
@@ -114,8 +116,10 @@
     <Content Include="Commands\Resources\Command1.png" />
     <Content Include="Commands\Resources\DebugCommand.png" />
     <Content Include="Commands\Resources\DebugFileTestsCommand.png" />
+    <Content Include="Commands\Resources\DebugProjectTestsCommand.png" />
     <Content Include="Commands\Resources\OptionsCommand.png" />
     <Content Include="Commands\Resources\RunFileTestsCommand.png" />
+    <Content Include="Commands\Resources\RunProjectTestsCommand.png" />
     <Content Include="Commands\Resources\ToolbarCommand2.png" />
     <Content Include="Commands\Resources\ToolbarDebugLastCommand.png" />
     <Content Include="Commands\Resources\ToolbarRunLastCommand.png" />

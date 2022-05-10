@@ -31,6 +31,12 @@
       <Group guid="guidOpenDrivenPackageCmdSet" id="ItemMenuGroup" priority="0x0100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet" id="ProjectMenuGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet1" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
     </Groups>
 
     <!--This section defines the elements the user can interact with, like a menu command or a button
@@ -116,6 +122,20 @@
           <ButtonText>Debug Test(s)</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet1" id="cmdidRunProjectTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ProjectMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Run Test(s)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet1" id="cmdidDebugProjectTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="ProjectMenuGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Debug Test(s)</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     <Bitmaps>
       <Bitmap guid="guidImages" href="Commands\Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
@@ -127,6 +147,8 @@
       <Bitmap guid="guidImages6" href="Commands\Resources\ToolbarDebugLastCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages7" href="Commands\Resources\RunFileTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages8" href="Commands\Resources\DebugFileTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages9" href="Commands\Resources\RunProjectTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages10" href="Commands\Resources\DebugProjectTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
@@ -142,6 +164,7 @@
     <GuidSymbol value="{c5bccf32-96d1-4e8a-93b2-a9c56ea803d9}" name="guidOpenDrivenPackageCmdSet">
       <IDSymbol value="4128" name="EditorContextMenuGroup" />
       <IDSymbol value="4130" name="ItemMenuGroup" />
+      <IDSymbol value="4131" name="ProjectMenuGroup" />
       
       <IDSymbol value="256" name="cmdidCommand1" />
       <IDSymbol value="257" name="cmdidDebugCommand" />
@@ -153,6 +176,9 @@
       <IDSymbol value="4179" name="cmdidToolbarDebugLastCommand" />
       <IDSymbol value="4180" name="cmdidRunFileTestsCommand" />
       <IDSymbol value="4181" name="cmdidDebugFileTestsCommand" />
+      <IDSymbol value="256" name="cmdidRunProjectTestsCommand" />
+      <IDSymbol value="4129" name="cmdidDebugProjectTestsCommand" />
+
     </GuidSymbol>
   
     <GuidSymbol value="{d65142af-d736-4826-8f66-fb14c9c96117}" name="guidImages">
@@ -229,6 +255,30 @@
     </GuidSymbol>
   
     <GuidSymbol value="{6333bd8b-d41d-4f58-b085-a197581c526a}" name="guidImages8">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{23807277-b10c-4815-af55-28c7a85ddc34}" name="guidOpenDrivenPackageCmdSet1">
+      <IDSymbol value="4128" name="MyMenuGroup" />
+      <IDSymbol value="256" name="cmdidRunProjectTestsCommand" />
+      <IDSymbol value="4129" name="cmdidDebugProjectTestsCommand" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{686a9bc8-d6e2-488b-83f2-4fd6864278f0}" name="guidImages9">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{63b32afd-bcba-4322-831b-90aa22626402}" name="guidImages10">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

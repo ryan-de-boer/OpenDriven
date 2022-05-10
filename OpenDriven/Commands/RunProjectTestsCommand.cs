@@ -14,17 +14,17 @@ namespace OpenDriven.Commands
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class ToolbarRunLastCommand
+  internal sealed class RunProjectTestsCommand
   {
     /// <summary>
     /// Command ID.
     /// </summary>
-    public const int CommandId = 4178;
+    public const int CommandId = 256;
 
     /// <summary>
     /// Command menu group (command set GUID).
     /// </summary>
-    public static readonly Guid CommandSet = new Guid("c5bccf32-96d1-4e8a-93b2-a9c56ea803d9");
+    public static readonly Guid CommandSet = new Guid("23807277-b10c-4815-af55-28c7a85ddc34");
 
     /// <summary>
     /// VS Package that provides this command, not null.
@@ -32,12 +32,12 @@ namespace OpenDriven.Commands
     private readonly AsyncPackage package;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ToolbarRunLastCommand"/> class.
+    /// Initializes a new instance of the <see cref="RunProjectTestsCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
     /// </summary>
     /// <param name="package">Owner package, not null.</param>
     /// <param name="commandService">Command service to add command to, not null.</param>
-    private ToolbarRunLastCommand(AsyncPackage package, OleMenuCommandService commandService)
+    private RunProjectTestsCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
       this.package = package ?? throw new ArgumentNullException(nameof(package));
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -50,7 +50,7 @@ namespace OpenDriven.Commands
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static ToolbarRunLastCommand Instance
+    public static RunProjectTestsCommand Instance
     {
       get;
       private set;
@@ -73,12 +73,12 @@ namespace OpenDriven.Commands
     /// <param name="package">Owner package, not null.</param>
     public static async Task InitializeAsync(AsyncPackage package)
     {
-      // Switch to the main thread - the call to AddCommand in ToolbarRunLastCommand's constructor requires
+      // Switch to the main thread - the call to AddCommand in RunProjectTestsCommand's constructor requires
       // the UI thread.
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
       OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-      Instance = new ToolbarRunLastCommand(package, commandService);
+      Instance = new RunProjectTestsCommand(package, commandService);
     }
 
     /// <summary>
@@ -92,83 +92,40 @@ namespace OpenDriven.Commands
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-      string title = "ToolbarRunLastCommand";
-
-      string fileName = "";
-      string testWithNamespace = "";
-      if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTest.txt"))
-      {
-        // $"{fileName}|{testWithNamespace}"
-        string[] tokens = File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt").Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-        fileName = tokens[0];
-        testWithNamespace = tokens[1];
-      }
-      else
-      {
-        // Show a message box to prove we were here
-        VsShellUtilities.ShowMessageBox(
-            this.package,
-            "No last test run found",
-            title,
-            OLEMSGICON.OLEMSGICON_INFO,
-            OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-        return;
-      }
-      if (fileName=="" || testWithNamespace=="")
-      {
-        // Show a message box to prove we were here
-        VsShellUtilities.ShowMessageBox(
-            this.package,
-            "Could not find last test run",
-            title,
-            OLEMSGICON.OLEMSGICON_INFO,
-            OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-        return;
-      }
+      string title = "RunProjectTestsCommand";
 
       EnvDTE.Project _selectedProject1 = null;
+      string fileName = "";
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;
       if (_projects.Length != 0 && _projects != null)
       {
-        string filePart = Path.GetFileName(fileName);
-        for (int i=0;i<_projects.Length;++i)
-        {
-          EnvDTE.Project p = _projects.GetValue(i) as EnvDTE.Project;
-          string pfileName = DebugTestsCommand.GetAssemblyPath(p);
-          if (pfileName.Contains(filePart))
-          {
-            _selectedProject1 = p;
-          }
-        }
+        EnvDTE.Project _selectedProject = _projects.GetValue(0) as EnvDTE.Project;
+        _selectedProject1 = _selectedProject;
+        //get the project path
+
+        fileName = DebugTestsCommand.GetAssemblyPath(_selectedProject);
+
       }
+
+      File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{fileName}|_PROJECT_");
 
       DebugTestsCommand.Build(_selectedProject1);
 
       var processStartInfo = new ProcessStartInfo
       {
         FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe",
-        Arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2",
+        Arguments = $"{fileName} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2",
         WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8",
         RedirectStandardOutput = true,
         UseShellExecute = false,
         CreateNoWindow = true,
       };
-      if (testWithNamespace=="_PROJECT_")
-      {
-        processStartInfo.Arguments = $"{fileName} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2";
-      }
       var process = System.Diagnostics.Process.Start(processStartInfo);
       var output = process.StandardOutput.ReadToEnd();
       process.WaitForExit();
 
       Window window = DebugTestsCommand.s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
       OutputWindow outputWindow = (OutputWindow)window.Object;
-      //      outputWindow.ActivePane.Activate();
-      //      outputWindow.ActivePane.OutputString(output);
       EnvDTE.OutputWindowPane owp;
       bool found = false;
       foreach (EnvDTE.OutputWindowPane x in outputWindow.OutputWindowPanes)
@@ -188,6 +145,7 @@ namespace OpenDriven.Commands
         owp.OutputString(output);
       }
 
+      HtmlReportCreator.ParseUnitTestResultsFolder("C:\\Program Files\\OpenDriven");
 
       if (output.Contains("Failed: 0,"))
       {
@@ -215,6 +173,8 @@ namespace OpenDriven.Commands
         ChangeMyCommand(4129, false);
         ChangeMyCommand(4177, true);
 
+
+
         FailDialog dialog = new FailDialog();
         dialog.ErrorTextBox.Text = RunTestsCommand.GetError();
         dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
@@ -224,12 +184,16 @@ namespace OpenDriven.Commands
         //  this.package,
         //  "FAIL",
         //  "Test Result",
-        //  OLEMSGICON.OLEMSGICON_INFO,
+        //  OLEMSGICON.OLEMSGICON_CRITICAL,
         //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
         //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
       }
 
-      //// Show a message box to prove we were here
+      int a = 1;
+      a++;
+
+
+      // Show a message box to prove we were here
       //VsShellUtilities.ShowMessageBox(
       //    this.package,
       //    message,
