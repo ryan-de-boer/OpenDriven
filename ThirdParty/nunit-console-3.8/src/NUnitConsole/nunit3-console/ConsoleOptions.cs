@@ -173,10 +173,9 @@ namespace NUnit.Common
             this.Add("set-principal-policy=", "Set PrincipalPolicy for the test domain.",
                 v => PrincipalPolicy = RequiredValue(v, "--set-principal-policy", "UnauthenticatedPrincipal", "NoPrincipal", "WindowsPrincipal"));
 
-#if DEBUG
             this.Add("debug-agent", "Launch debugger in nunit-agent when it starts.",
                 v => DebugAgent = v != null);
-#endif
+
             //this.Add("port", "Launch debugger in nunit-agent when it starts.",
             //    v => Port = RequiredValue(v, "--port"));
         }

@@ -458,14 +458,12 @@ namespace NUnit.ConsoleRunner
             if (options.PrincipalPolicy != null)
                 package.AddSetting(EnginePackageSettings.PrincipalPolicy, options.PrincipalPolicy);
 
-#if DEBUG
             if (options.DebugAgent)
                 package.AddSetting(EnginePackageSettings.DebugAgent, true);
 
             //foreach (KeyValuePair<string, object> entry in package.Settings)
             //    if (!(entry.Value is string || entry.Value is int || entry.Value is bool))
             //        throw new Exception(string.Format("Package setting {0} is not a valid type", entry.Key));
-#endif
 
             if (options.DefaultTestNamePattern != null)
                 package.AddSetting(FrameworkPackageSettings.DefaultTestNamePattern, options.DefaultTestNamePattern);
