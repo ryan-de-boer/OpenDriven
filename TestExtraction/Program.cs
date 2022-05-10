@@ -13,6 +13,34 @@ namespace TestExtraction
   {
     static void Main(string[] args)
     {
+      string text = File.ReadAllText(@"..\..\Text.txt");
+
+      string expectedNamespaceTest = "Hardware.Graphics.Tests.UnitTests";
+
+      string actualNamespaceTest = ExtractNamespaceFolder(text, "UnitTests");
+
+      if (actualNamespaceTest != expectedNamespaceTest)
+      {
+        MessageBox.Show("differs");
+      }
+
+      int v = 1;
+      v++;
+    }
+
+    static string ExtractNamespaceFolder(string text, string folder)
+    {
+      string endNamespace = "." + folder;
+      string namespaceText = text.Substring(text.IndexOf("namespace "));
+      namespaceText = namespaceText.Substring("namespace ".Length);
+      namespaceText = namespaceText.Substring(0, namespaceText.LastIndexOf(endNamespace)+ endNamespace.Length).Trim();
+
+      return namespaceText;
+    }
+
+
+    static void TestExtractFileLine()
+    {
       XmlDocument xmlDoc = new XmlDocument();
       xmlDoc.Load(@"C:\Program Files\OpenDriven\junit-output.xml");
 
@@ -36,7 +64,7 @@ namespace TestExtraction
                   errors.Add(error);
                 }
               }
-                
+
               int b = 1;
               b++;
             }
@@ -48,19 +76,17 @@ namespace TestExtraction
       }
 
       StringBuilder sb = new StringBuilder();
-      for (int i=0;i<names.Count; i++)
+      for (int i = 0; i < names.Count; i++)
       {
-        sb.AppendLine(names[i]+":");
+        sb.AppendLine(names[i] + ":");
         sb.AppendLine(errors[i]);
       }
       string output = sb.ToString();
 
       ExtractFileLine(output, out string file, out int lineNumber);
-      int v = 1;
-      v++;
     }
 
-    static void ExtractFileLine(string output, out string file, out int lineNumber)
+      static void ExtractFileLine(string output, out string file, out int lineNumber)
     {
       int lastLineIndex = output.LastIndexOf(":line");
       string subs = output.Substring(0, lastLineIndex);

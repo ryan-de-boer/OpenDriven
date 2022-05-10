@@ -133,6 +133,7 @@ namespace OpenDriven.Commands
     }
 
     public static EnvDTE.DTE s_dte;
+    public static EnvDTE80.DTE2 s_dte2;
 
     //https://docs.microsoft.com/en-us/dotnet/api/envdte.process.attach?view=visualstudiosdk-2022
     public static void Attach(DTE dte)

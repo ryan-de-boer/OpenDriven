@@ -33,6 +33,8 @@ namespace OpenDriven
       DebugTestsCommand.s_dte = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE));
       RunTestsCommand.s_dte = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE));
 
+      DebugTestsCommand.s_dte2 = this.GetService(typeof(EnvDTE.DTE)) as EnvDTE80.DTE2;
+
       await this.RegisterCommandsAsync();
         await OpenDriven.Commands.RunTestsCommand.InitializeAsync(this);
         await OpenDriven.Commands.DebugTestsCommand.InitializeAsync(this);
@@ -102,6 +104,8 @@ namespace OpenDriven
         await OpenDriven.Commands.DebugFileTestsCommand.InitializeAsync(this);
         await OpenDriven.Commands.RunProjectTestsCommand.InitializeAsync(this);
         await OpenDriven.Commands.DebugProjectTestsCommand.InitializeAsync(this);
+        await OpenDriven.Commands.RunFolderTestsCommand.InitializeAsync(this);
+        await OpenDriven.Commands.DebugFolderTestsCommand.InitializeAsync(this);
       
 
 

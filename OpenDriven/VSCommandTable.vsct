@@ -34,6 +34,9 @@
       <Group guid="guidOpenDrivenPackageCmdSet" id="ProjectMenuGroup" priority="0x0100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
       </Group>
+      <Group guid="guidOpenDrivenPackageCmdSet" id="FolderMenuGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
+      </Group>
       <Group guid="guidOpenDrivenPackageCmdSet1" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
       </Group>
@@ -136,6 +139,20 @@
           <ButtonText>Debug Test(s)</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet1" id="cmdidRunFolderTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="FolderMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Run Test(s)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet1" id="cmdidDebugFolderTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="FolderMenuGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Debug Test(s)</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     <Bitmaps>
       <Bitmap guid="guidImages" href="Commands\Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
@@ -149,6 +166,8 @@
       <Bitmap guid="guidImages8" href="Commands\Resources\DebugFileTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages9" href="Commands\Resources\RunProjectTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
       <Bitmap guid="guidImages10" href="Commands\Resources\DebugProjectTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages11" href="Commands\Resources\RunFolderTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages12" href="Commands\Resources\DebugFolderTestsCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
@@ -165,7 +184,8 @@
       <IDSymbol value="4128" name="EditorContextMenuGroup" />
       <IDSymbol value="4130" name="ItemMenuGroup" />
       <IDSymbol value="4131" name="ProjectMenuGroup" />
-      
+      <IDSymbol value="4132" name="FolderMenuGroup" />
+
       <IDSymbol value="256" name="cmdidCommand1" />
       <IDSymbol value="257" name="cmdidDebugCommand" />
       <IDSymbol value="4129" name="cmdidToolbarTestCommand" />
@@ -267,6 +287,8 @@
       <IDSymbol value="4128" name="MyMenuGroup" />
       <IDSymbol value="256" name="cmdidRunProjectTestsCommand" />
       <IDSymbol value="4129" name="cmdidDebugProjectTestsCommand" />
+      <IDSymbol value="4130" name="cmdidRunFolderTestsCommand" />
+      <IDSymbol value="4131" name="cmdidDebugFolderTestsCommand" />
     </GuidSymbol>
   
     <GuidSymbol value="{686a9bc8-d6e2-488b-83f2-4fd6864278f0}" name="guidImages9">
@@ -279,6 +301,24 @@
     </GuidSymbol>
   
     <GuidSymbol value="{63b32afd-bcba-4322-831b-90aa22626402}" name="guidImages10">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{6b9723ee-098b-4de6-a7ef-ce544c368215}" name="guidImages11">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{5a2b1075-0f95-49df-a716-d82c9e4d8384}" name="guidImages12">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

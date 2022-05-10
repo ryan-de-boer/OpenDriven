@@ -53,6 +53,12 @@ namespace OpenDriven
 
         public const string guidImages10String = "63b32afd-bcba-4322-831b-90aa22626402";
         public static Guid guidImages10 = new Guid(guidImages10String);
+
+        public const string guidImages11String = "6b9723ee-098b-4de6-a7ef-ce544c368215";
+        public static Guid guidImages11 = new Guid(guidImages11String);
+
+        public const string guidImages12String = "5a2b1075-0f95-49df-a716-d82c9e4d8384";
+        public static Guid guidImages12 = new Guid(guidImages12String);
     }
     /// <summary>
     /// Helper class that encapsulates all CommandIDs uses across VS Package.
@@ -64,6 +70,7 @@ namespace OpenDriven
         public const int EditorContextMenuGroup = 0x1020;
         public const int ItemMenuGroup = 0x1022;
         public const int ProjectMenuGroup = 0x1023;
+        public const int FolderMenuGroup = 0x1024;
         public const int cmdidCommand1 = 0x0100;
         public const int cmdidDebugCommand = 0x0101;
         public const int cmdidToolbarTestCommand = 0x1021;
@@ -83,5 +90,7 @@ namespace OpenDriven
         public const int bmpPicArrows = 0x0005;
         public const int bmpPicStrikethrough = 0x0006;
         public const int MyMenuGroup = 0x1020;
+        public const int cmdidRunFolderTestsCommand = 0x1022;
+        public const int cmdidDebugFolderTestsCommand = 0x1023;
     }
 }
