@@ -331,9 +331,19 @@ namespace OpenDriven.Commands
       namespaceText = namespaceText.Substring("namespace ".Length);
       namespaceText = namespaceText.Substring(0, namespaceText.IndexOf("\n")).Trim();
 
+      if (text.IndexOf("public class") == -1)
+      {
+        return $"{namespaceText}";
+      }
+
       string className = text.Substring(text.IndexOf("public class"));
       className = className.Substring("public class".Length);
       className = className.Substring(0, className.IndexOf("\n")).Trim();
+
+      if (text.LastIndexOf("[Test]") == -1)
+      {
+        return $"{namespaceText}.{className}";
+      }
 
       string testName = text.Substring(text.LastIndexOf("[Test]"));
       testName = testName.Substring(testName.IndexOf("public void"));
