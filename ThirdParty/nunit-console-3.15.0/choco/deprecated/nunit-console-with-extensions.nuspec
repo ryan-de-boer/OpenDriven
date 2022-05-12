@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>nunit-console-with-extensions</id>
+    <version>0.0.0</version>
+    <title>NUnit 3 Console Runner Plus Extensions</title>
+    <summary>Console runner for the NUnit 3 unit-testing framework with selected extensions.</summary>
+    <description>
+      This package is now obsolete. It is partially replaced by the nunit-console-runner package.
+      Because of the nature of Chocolatey, it is not necessary to have a console runner with a set of
+      standard extensions built-in. Install extensions separately for use with nunit-console-runner.
+    </description>
+    <projectUrl>https://nunit.org</projectUrl>
+    <projectSourceUrl>https://github.com/nunit/nunit-console</projectSourceUrl>
+    <docsUrl>https://github.com/nunit/docs/wiki/Console-Command-Line</docsUrl>
+    <bugTrackerUrl>https://github.com/nunit/nunit-console/issues</bugTrackerUrl>
+    <iconUrl>https://cdn.rawgit.com/nunit/resources/master/images/icon/nunit_256.png</iconUrl>
+    <packageSourceUrl>https://github.com/nunit/nunit-console</packageSourceUrl>
+    <releaseNotes>https://docs.nunit.org/articles/nunit/release-notes/console-and-engine.html</releaseNotes>
+    <mailingListUrl>https://groups.google.com/forum/#!forum/nunit-discuss</mailingListUrl>
+    <licenseUrl>https://raw.githubusercontent.com/nunit/nunit-console/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <authors>Charlie Poole, Rob Prouse</authors>
+    <owners>Charlie Poole, Rob Prouse</owners>
+    <language>en-US</language>
+    <tags>nunit console runner test testing tdd</tags>
+    <copyright>Copyright (c) 2021 Charlie Poole, Rob Prouse</copyright>
+    <dependencies>
+      <group>
+          <dependency id="nunit-console-runner" version="$version$" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

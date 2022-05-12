@@ -115,6 +115,7 @@ namespace OpenDriven.Commands
         break;
       }
 
+      Track.TrackFile();
       EnvDTE.Project _selectedProject1 = null;
       string fileName = "";
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;

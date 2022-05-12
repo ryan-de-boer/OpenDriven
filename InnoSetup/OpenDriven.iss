@@ -36,6 +36,7 @@ Source: "..\OpenDriven\bin\Release\OpenDriven.vsix"; DestDir: "{app}"; Flags: ig
 Source: "..\ThirdParty\*.xsl"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\ThirdParty\*.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\ThirdParty\nunit-console-3.8\bin\Release\*.*"; Excludes: "*.pdb"; DestDir: "{app}\nunit-console-3.8"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\ThirdParty\nunit-console-3.15.0\bin\Release\net6.0\*.*"; Excludes: "*.pdb"; DestDir: "{app}\nunit-console-3.15.0\net6.0"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Run]

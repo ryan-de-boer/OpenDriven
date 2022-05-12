@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows;
+using NUnit.Framework;
+
+namespace Hardware.Graphics.Tests.UnitTests
+{
+  /// <summary>
+  /// Unit tests that test the parsing of graphics.
+  /// </summary>
+  [TestFixture]
+  [Category("Unit")]
+  public class GfxUnitTests
+  {
+    /// <summary>
+    /// Tests that we can read from a file. 
+    /// </summary>
+    [Test]
+    public void TestCreateGraphicsFromJson()
+    {
+      int d = 1;

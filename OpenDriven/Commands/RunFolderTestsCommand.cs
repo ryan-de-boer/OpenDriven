@@ -126,6 +126,7 @@ namespace OpenDriven.Commands
         break;
       }
 
+      Track.TrackFile();
       EnvDTE.Project _selectedProject1 = null;
       string fileName = "";
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;
@@ -182,7 +183,7 @@ namespace OpenDriven.Commands
 
       HtmlReportCreator.ParseUnitTestResultsFolder("C:\\Program Files\\OpenDriven");
 
-      if (output.Contains("Failed: 0,"))
+      if (output.Contains("Failed: 0,") && output.Contains("Overall result: Passed"))
       {
         File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "PASS");
 

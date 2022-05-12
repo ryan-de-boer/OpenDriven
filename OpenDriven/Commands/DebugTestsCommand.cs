@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net.Sockets;
@@ -17,7 +18,7 @@ namespace OpenDriven.Commands
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class DebugTestsCommand
+  public sealed class DebugTestsCommand
   {
     /// <summary>
     /// Command ID.
@@ -142,6 +143,15 @@ namespace OpenDriven.Commands
       EnvDTE.Processes processes = dte.Debugger.LocalProcesses;
       foreach (EnvDTE.Process proc in processes)
         if (proc.Name.IndexOf("nunit-agent.exe") != -1)
+          proc.Attach();
+    }
+
+    public static void AttachConsole(DTE dte)
+    {
+      ThreadHelper.ThrowIfNotOnUIThread();
+      EnvDTE.Processes processes = dte.Debugger.LocalProcesses;
+      foreach (EnvDTE.Process proc in processes)
+        if (proc.Name.IndexOf("nunit3-console.exe") != -1)
           proc.Attach();
     }
 
@@ -384,7 +394,7 @@ namespace OpenDriven.Commands
       //     thread1.Start();
 
 
-
+      Track.TrackFile();
       string fileName = "";
       EnvDTE.Project _selectedProject1 = null;
       Array _projects = s_dte.ActiveSolutionProjects as Array;
@@ -416,36 +426,109 @@ namespace OpenDriven.Commands
       {
         File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
       }
+      if (File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\ReadyToAttach.txt"))
+      {
+        File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\ReadyToAttach.txt");
+      }
+    
 
 
       Build(_selectedProject1);
 
- //     File.WriteAllText(@"C:\Program Files\OpenDriven\nunit-console-3.8\port.txt", server.m_port.ToString());
+      //     File.WriteAllText(@"C:\Program Files\OpenDriven\nunit-console-3.8\port.txt", server.m_port.ToString());
 
-      System.Diagnostics.Process cmd = new System.Diagnostics.Process();
-      cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
-      cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
-      cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-      cmd.StartInfo.CreateNoWindow = true;
-      cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
-      cmd.Start();
+      System.Diagnostics.Process process;
+      if (fileName.Contains("net6.0"))
+      {
+        // Does not support nunit2 format.
+        string filePath = Path.GetDirectoryName(fileName);
+        string netFrameworkDll = Path.Combine(filePath, "nunit.framework.dll");
+        if (!File.Exists(netFrameworkDll))
+        {
+          // For some reason this dependency dll does not get copied to output folder.
+          File.Copy(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit.framework.dll", netFrameworkDll);
+        }
+
+        //        EnvDTE80.DTE2 dte2 = (EnvDTE80.DTE2)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE.12.0");
+        //        EnvDTE.Project project = dte2.Solution.Projects.Item(1);
+
+        //        Configuration configuration = _selectedProject1.ConfigurationManager.ActiveConfiguration;
+        //        var a = configuration.Properties.Item("StartAction").Value;
+        //        var b = configuration.Properties.Item("StartProgram").Value;
+        //        var c = configuration.Properties.Item("StartArguments").Value;
+
+        //        configuration.Properties.Item("StartAction").Value = VSLangProj.prjStartAction.prjStartActionProgram;
+        //        configuration.Properties.Item("StartProgram").Value = "your exe file";
+        //       configuration.Properties.Item("StartArguments").Value = "command line arguments";
+
+
+        //s_dte.ExecuteCommand("ClassViewContextMenus.ClassViewProject.Debug.Startnewinstance");
+
+        //var processStartInfo = new ProcessStartInfo
+        //{
+        //  FileName = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit3-console.exe",
+        //  Arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\outputv3.xml\"",
+        //  WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0",
+        //  RedirectStandardOutput = true,
+        //  UseShellExecute = false,
+        //  CreateNoWindow = true,
+        //};
+        //process = System.Diagnostics.Process.Start(processStartInfo);
+
+        System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+        cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit3-console.exe";
+        cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0";
+        cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+        cmd.StartInfo.CreateNoWindow = true;
+        cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
+        cmd.Start();
+      }
+      else
+      {
+        System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+        cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
+        cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
+        cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+        cmd.StartInfo.CreateNoWindow = true;
+        cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
+        cmd.Start();
+      }
+
 
       //while (!s_eventOccurred)
       //{
       //  System.Threading.Thread.Sleep(10);
       //}
 
-      while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
+      if (!fileName.Contains("net6.0"))
       {
-        System.Threading.Thread.Sleep(500);
+        while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
+        {
+          System.Threading.Thread.Sleep(500);
+        }
+
+
+        //     WaitAttach(s_dte);
+
+        Attach(s_dte);
+
+        File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
       }
+      else
+      {
+        //.net 6
+        while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\ReadyToAttach.txt"))
+        {
+          System.Threading.Thread.Sleep(500);
+        }
 
 
-      //     WaitAttach(s_dte);
+        //     WaitAttach(s_dte);
 
-      Attach(s_dte);
+        AttachConsole(s_dte);
 
-      File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
+        File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\ReadyToAttach.txt");
+      }
 
       // Show a message box to prove we were here
       //VsShellUtilities.ShowMessageBox(

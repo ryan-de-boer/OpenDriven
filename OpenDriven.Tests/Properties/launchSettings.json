@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "OpenDriven.Tests": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\OpenDriven\\NUnit.Console-3.15.0\\net6.0\\nunit3-console.exe",
+      "commandLineArgs": "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Tests\\bin\\Debug\\net6.0\\OpenDriven.Tests.dll  /test=OpenDriven.Tests -result:\"C:\\Program Files\\OpenDriven\\outputv3.xml\"",
+      "workingDirectory": "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Tests\\bin\\Debug\\net6.0"
+    }
+  }
+}

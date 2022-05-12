@@ -126,6 +126,7 @@ namespace OpenDriven.Commands
       string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
       string title = "DebugFileTestsCommand";
 
+      Track.TrackFile();
       EnvDTE.Project _selectedProject1 = null;
       string fileName = "";
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;

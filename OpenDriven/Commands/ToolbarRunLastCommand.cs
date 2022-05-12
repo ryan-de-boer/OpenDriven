@@ -130,6 +130,7 @@ namespace OpenDriven.Commands
         return;
       }
 
+      Track.TrackFile();
       EnvDTE.Project _selectedProject1 = null;
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;
       if (_projects.Length != 0 && _projects != null)
@@ -189,7 +190,7 @@ namespace OpenDriven.Commands
       }
 
 
-      if (output.Contains("Failed: 0,"))
+      if (output.Contains("Failed: 0,") && output.Contains("Overall result: Passed"))
       {
         File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "PASS");
 

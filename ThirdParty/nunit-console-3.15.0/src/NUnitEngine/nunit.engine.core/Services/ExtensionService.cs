@@ -1,0 +1,106 @@
+﻿// Copyright (c) Charlie Poole, Rob Prouse and Contributors. MIT License - see LICENSE.txt
+
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Mono.Cecil;
+using NUnit.Engine.Extensibility;
+using NUnit.Engine.Internal;
+using NUnit.Engine.Internal.Backports;
+using NUnit.Engine.Internal.FileSystemAccess;
+using NUnit.Engine.Internal.FileSystemAccess.Default;
+
+using Backports = NUnit.Engine.Internal.Backports;
+#if NET20 || NETSTANDARD2_0
+using Path = NUnit.Engine.Internal.Backports.Path;
+#else
+using Path = System.IO.Path;
+#endif
+
+namespace NUnit.Engine.Services
+{
+    /// <summary>
+    /// The ExtensionService discovers ExtensionPoints and Extensions and
+    /// maintains them in a database. It can return extension nodes or
+    /// actual extension objects on request.
+    /// </summary>
+    public class ExtensionService : Service, IExtensionService
+    {
+        private readonly ExtensionManager _extensionManager;
+
+        public ExtensionService()
+        {
+            _extensionManager = new ExtensionManager();
+        }
+
+        internal ExtensionService(IAddinsFileReader addinsReader, IFileSystem fileSystem)
+            : this(addinsReader, fileSystem, new DirectoryFinder(fileSystem))
+        {
+            _extensionManager = new ExtensionManager(addinsReader, fileSystem);
+        }
+
+        internal ExtensionService(IAddinsFileReader addinsReader, IFileSystem fileSystem, IDirectoryFinder directoryFinder)
+        {
+            _extensionManager = new ExtensionManager(addinsReader, fileSystem, directoryFinder);
+        }
+
+        public IEnumerable<IExtensionPoint> ExtensionPoints => _extensionManager.ExtensionPoints;
+
+        public IEnumerable<IExtensionNode> Extensions => _extensionManager.Extensions;
+
+        /// <summary>
+        /// Get an ExtensionPoint based on its unique identifying path.
+        /// </summary>
+        IExtensionPoint IExtensionService.GetExtensionPoint(string path)
+        {
+            return _extensionManager.GetExtensionPoint(path);
+        }
+
+        /// <summary>
+        /// Get an enumeration of ExtensionNodes based on their identifying path.
+        /// </summary>
+        IEnumerable<IExtensionNode> IExtensionService.GetExtensionNodes(string path)
+        {
+            foreach (var node in _extensionManager.GetExtensionNodes(path))
+                yield return node;
+        }
+
+        public void EnableExtension(string typeName, bool enabled)
+        {
+            _extensionManager.EnableExtension(typeName, enabled);
+        }
+
+        public IEnumerable<T> GetExtensions<T>() => _extensionManager.GetExtensions<T>();
+
+        public ExtensionNode GetExtensionNode(string path) => _extensionManager.GetExtensionNode(path);
+
+        public IEnumerable<ExtensionNode> GetExtensionNodes<T>() => _extensionManager.GetExtensionNodes<T>();
+
+        public override void StartService()
+        {
+            try
+            {
+                _extensionManager.FindExtensionPoints(
+                    Assembly.GetExecutingAssembly(),
+                    typeof(ITestEngine).Assembly);
+
+                var thisAssembly = Assembly.GetExecutingAssembly();
+                _extensionManager.FindExtensions(AssemblyHelper.GetDirectoryName(thisAssembly));
+
+                Status = ServiceStatus.Started;
+            }
+            catch
+            {
+                Status = ServiceStatus.Error;
+                throw;
+            }
+        }
+
+        public override void StopService()
+        {
+            _extensionManager.Dispose();
+
+            Status = ServiceStatus.Stopped;
+        }
+    }
+}

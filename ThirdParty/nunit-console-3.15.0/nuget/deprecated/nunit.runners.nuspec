@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NUnit.Runners</id>
+    <title>NUnit Console Runner - Deprecated: Use NUnit.Console</title>
+    <version>$version$</version>
+    <authors>Charlie Poole</authors>
+    <owners>Charlie Poole</owners>
+    <license type="file">LICENSE.txt</license>
+    <projectUrl>https://nunit.org</projectUrl>
+    <repository type="git" url="https://github.com/nunit/nunit-console"/>
+    <iconUrl>https://cdn.rawgit.com/nunit/resources/master/images/icon/nunit_256.png</iconUrl>
+    <icon>images\nunit_256.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>Deprecated NUnit 3 console runner - use NUnit.Console or NUnit.ConsoleRunner.</summary>
+    <description>
+      This package is now obsolete and has been replaced by the NUnit.Console package.
+    </description>
+    <releaseNotes>https://docs.nunit.org/articles/nunit/release-notes/console-and-engine.html</releaseNotes>
+    <language>en-US</language>
+    <tags>nunit test testing tdd runner</tags>
+    <copyright>Copyright (c) 2021 Charlie Poole</copyright>
+    <dependencies>
+      <group>
+        <dependency id="NUnit.Console" version="$version$" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
