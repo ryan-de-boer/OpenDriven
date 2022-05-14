@@ -175,7 +175,7 @@ namespace OpenDriven.Commands
       DebugTestsCommand.Build(_selectedProject1);
 
       System.Diagnostics.Process process;
-      if (fileName.Contains("net6.0"))
+      if (fileName.Contains("net6.0")|| fileName.Contains("net5.0") || fileName.Contains("netstandard")) // eg netstandard2.1
       {
         // Does not support nunit2 format.
         string filePath = Path.GetDirectoryName(fileName);
@@ -214,7 +214,7 @@ namespace OpenDriven.Commands
       string output = process.StandardOutput.ReadToEnd();
       process.WaitForExit();
 
-      if (fileName.Contains("net6.0"))
+      if (fileName.Contains("net6.0") || fileName.Contains("net5.0") || fileName.Contains("netstandard")) // eg netstandard2.1
       {
         string outputv3 = "C:\\Program Files\\OpenDriven\\outputv3.xml";
         string outputv2 = "C:\\Program Files\\OpenDriven\\output.xml";
@@ -226,6 +226,7 @@ namespace OpenDriven.Commands
 
         var writer = new NUnit2XmlResultWriter();
         writer.WriteResultFile(xmlnode, outputv2);
+        fileStream.Close();
       }
 
       Window window = s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
