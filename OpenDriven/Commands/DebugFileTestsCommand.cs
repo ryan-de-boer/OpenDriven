@@ -172,7 +172,7 @@ namespace OpenDriven.Commands
         System.Threading.Thread.Sleep(500);
       }
 
-      DebugTestsCommand.Attach(DebugTestsCommand.s_dte);
+      DebugTests.Attach(DebugTestsCommand.s_dte);
 
       File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
 

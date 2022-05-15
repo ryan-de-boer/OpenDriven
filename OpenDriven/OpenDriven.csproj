@@ -57,6 +57,7 @@
     <Compile Include="Commands\ToolbarDebugLastCommand.cs" />
     <Compile Include="Commands\ToolbarRunLastCommand.cs" />
     <Compile Include="Commands\ToolbarOpenReportPassedCommand.cs" />
+    <Compile Include="DebugTests.cs" />
     <Compile Include="FailDialog.xaml.cs">
       <DependentUpon>FailDialog.xaml</DependentUpon>
     </Compile>
@@ -67,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\ConfigureCommand.cs" />
     <Compile Include="OpenDrivenPackage.cs" />
+    <Compile Include="RunTests.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

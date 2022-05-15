@@ -13,6 +13,68 @@ namespace TestExtraction
   {
     static void Main(string[] args)
     {
+      //     string "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.5.Tests\\bin\\Debug\\net5.0\\OpenDriven.5.Tests.dll"
+
+      string dn5 = "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.5.Tests\\bin\\Debug\\net5.0\\OpenDriven.5.Tests.dll";
+      string framwork = "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Framework48.Tests\\bin\\Debug\\OpenDriven.Framework48.Tests.dll";
+      string netstandard = "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Standard21.Tests\\bin\\Debug\\netstandard2.1\\OpenDriven.Standard21.Tests.dll";
+
+      bool n = NewDotNet(dn5);
+      bool n6 = NewDotNet("D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Tests\\bin\\Debug\\net6.0\\OpenDriven.Tests.dll");
+      bool n7 = NewDotNet("D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Tests\\bin\\Debug\\net7.0\\OpenDriven.Tests.dll");
+      bool s = DotNetStandard(netstandard);
+      bool s2 = DotNetStandard(dn5);
+      bool f = DotNetFramework(framwork);
+      bool f2 = NewDotNet(framwork);
+      int v = 1;
+      v++;
+    }
+
+    //return true for >= dot net 5
+    static bool NewDotNet(string fileName)
+    {
+      string sub = fileName.Substring(fileName.IndexOf("bin\\Debug\\") + "bin\\Debug\\".Length);
+      if (!sub.Contains("\\"))
+      {
+        return false;
+      }
+      sub = sub.Substring(0, sub.IndexOf("\\"));
+      if (!sub.StartsWith("net"))
+      {
+        return false;
+      }
+      string ver = sub.Substring("net".Length);
+      decimal.TryParse(ver, out decimal result);
+      return result >= new decimal(5.0);
+    }
+
+    static bool DotNetStandard(string fileName)
+    {
+      string sub = fileName.Substring(fileName.IndexOf("bin\\Debug\\") + "bin\\Debug\\".Length);
+      if (!sub.Contains("\\"))
+      {
+        return false;
+      }
+      sub = sub.Substring(0, sub.IndexOf("\\"));
+      if (!sub.StartsWith("netstandard"))
+      {
+        return false;
+      }
+      return true;
+    }
+
+    static bool DotNetFramework(string fileName)
+    {
+      string sub = fileName.Substring(fileName.IndexOf("bin\\Debug\\") + "bin\\Debug\\".Length);
+      if (sub.Contains("\\"))
+      {
+        return false;
+      }
+      return true;
+    }
+
+    static void TestExtractNamespaceFolder()
+    {
       string text = File.ReadAllText(@"..\..\Text.txt");
 
       string expectedNamespaceTest = "Hardware.Graphics.Tests.UnitTests";
@@ -24,8 +86,6 @@ namespace TestExtraction
         MessageBox.Show("differs");
       }
 
-      int v = 1;
-      v++;
     }
 
     static string ExtractNamespaceFolder(string text, string folder)
