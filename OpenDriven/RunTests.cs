@@ -15,7 +15,25 @@ namespace OpenDriven
     public static string Run(string fileName, string testWithNamespace)
     {
       System.Diagnostics.Process process;
-      if (fileName.Contains("net6.0") || fileName.Contains("net5.0") || fileName.Contains("netstandard")) // eg netstandard2.1
+      if (DebugTests.DotNetFramework(fileName))
+      {
+        string arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2";
+        if (testWithNamespace == "_PROJECT_")
+        {
+          arguments = $"{fileName} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2";
+        }
+        var processStartInfo = new ProcessStartInfo
+        {
+          FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe",
+          Arguments = arguments,
+          WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8",
+          RedirectStandardOutput = true,
+          UseShellExecute = false,
+          CreateNoWindow = true,
+        };
+        process = System.Diagnostics.Process.Start(processStartInfo);
+      }
+      else  //.net 5+ or netstandard
       {
         // Does not support nunit2 format.
         string filePath = Path.GetDirectoryName(fileName);
@@ -26,24 +44,16 @@ namespace OpenDriven
           File.Copy(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit.framework.dll", netFrameworkDll);
         }
 
+        string arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\outputv3.xml\"";
+        if (testWithNamespace == "_PROJECT_")
+        {
+          arguments = $"{fileName} -result:\"C:\\Program Files\\OpenDriven\\outputv3.xml\"";
+        }
         var processStartInfo = new ProcessStartInfo
         {
           FileName = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit3-console.exe",
-          Arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\outputv3.xml\"",
+          Arguments = arguments,
           WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0",
-          RedirectStandardOutput = true,
-          UseShellExecute = false,
-          CreateNoWindow = true,
-        };
-        process = System.Diagnostics.Process.Start(processStartInfo);
-      }
-      else
-      {
-        var processStartInfo = new ProcessStartInfo
-        {
-          FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe",
-          Arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2",
-          WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8",
           RedirectStandardOutput = true,
           UseShellExecute = false,
           CreateNoWindow = true,
@@ -54,8 +64,9 @@ namespace OpenDriven
       string output = process.StandardOutput.ReadToEnd();
       process.WaitForExit();
 
-      if (fileName.Contains("net6.0") || fileName.Contains("net5.0") || fileName.Contains("netstandard")) // eg netstandard2.1
+      if (!DebugTests.DotNetFramework(fileName))
       {
+        //.net 5+ or netstandard
         string outputv3 = "C:\\Program Files\\OpenDriven\\outputv3.xml";
         string outputv2 = "C:\\Program Files\\OpenDriven\\output.xml";
         var xmldoc = new XmlDataDocument();
