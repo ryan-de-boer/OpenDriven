@@ -89,12 +89,17 @@ namespace OpenDriven
       System.Diagnostics.Process process;
       if (DotNetFramework(fileName))
       {
+        string arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
+        if (testWithNamespace=="_PROJECT_")
+        {
+          arguments = $"{fileName} --debug-agent";
+        }
         System.Diagnostics.Process cmd = new System.Diagnostics.Process();
         cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
         cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
         cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
         cmd.StartInfo.CreateNoWindow = true;
-        cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
+        cmd.StartInfo.Arguments = arguments;
         cmd.Start();
       }
       else //.net 5+ or netstandard
@@ -108,12 +113,17 @@ namespace OpenDriven
           File.Copy(@"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit.framework.dll", netFrameworkDll);
         }
 
+        string arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
+        if (testWithNamespace == "_PROJECT_")
+        {
+          arguments = $"{fileName} --debug-agent";
+        }
         System.Diagnostics.Process cmd = new System.Diagnostics.Process();
         cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0\nunit3-console.exe";
         cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.15.0\net6.0";
         cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
         cmd.StartInfo.CreateNoWindow = true;
-        cmd.StartInfo.Arguments = $"{fileName} /test={testWithNamespace} --debug-agent";
+        cmd.StartInfo.Arguments = arguments;
         cmd.Start();
       }
 

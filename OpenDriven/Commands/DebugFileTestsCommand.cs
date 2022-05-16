@@ -152,29 +152,11 @@ namespace OpenDriven.Commands
       string classWithNamespace = DebugTestsCommand.ExtractNamespaceClass(File.ReadAllText(itemFullPath));
       File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName}|{classWithNamespace}");
 
-      if (File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
-      {
-        File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
-      }
+      DebugTests.PreDebug();
 
       DebugTestsCommand.Build(_selectedProject1);
 
-      System.Diagnostics.Process cmd = new System.Diagnostics.Process();
-      cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
-      cmd.StartInfo.WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8";
-      cmd.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-      cmd.StartInfo.CreateNoWindow = true;
-      cmd.StartInfo.Arguments = $"{fileName} /test={classWithNamespace} --debug-agent";
-      cmd.Start();
-
-      while (!File.Exists(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt"))
-      {
-        System.Threading.Thread.Sleep(500);
-      }
-
-      DebugTests.Attach(DebugTestsCommand.s_dte);
-
-      File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
+      DebugTests.Debug(fileName, classWithNamespace, DebugTestsCommand.s_dte);
 
       //// Show a message box to prove we were here
       //VsShellUtilities.ShowMessageBox(
