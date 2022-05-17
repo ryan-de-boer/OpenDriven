@@ -16,7 +16,7 @@ namespace OpenDriven._5.Tests
       //          System.Threading.Thread.Sleep(1000);
       //      }
 
-      Assert.That("A", Is.EqualTo("A"), "Expected text differs");
+      Assert.That("B", Is.EqualTo("A"), "Expected text differs");
     }
 
     [Test]
