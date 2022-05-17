@@ -149,22 +149,7 @@ namespace OpenDriven.Commands
 
       DebugTestsCommand.Build(_selectedProject1);
 
-      var processStartInfo = new ProcessStartInfo
-      {
-        FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe",
-        Arguments = $"{fileName} /test={testWithNamespace} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2",
-        WorkingDirectory = @"C:\Program Files\OpenDriven\nunit-console-3.8",
-        RedirectStandardOutput = true,
-        UseShellExecute = false,
-        CreateNoWindow = true,
-      };
-      if (testWithNamespace=="_PROJECT_")
-      {
-        processStartInfo.Arguments = $"{fileName} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2";
-      }
-      var process = System.Diagnostics.Process.Start(processStartInfo);
-      var output = process.StandardOutput.ReadToEnd();
-      process.WaitForExit();
+      string output = RunTests.Run(fileName, testWithNamespace);
 
       Window window = DebugTestsCommand.s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
       OutputWindow outputWindow = (OutputWindow)window.Object;

@@ -18,5 +18,17 @@ namespace OpenDriven._5.Tests
 
       Assert.That("A", Is.EqualTo("A"), "Expected text differs");
     }
+
+    [Test]
+    public void TestB()
+    {
+      Assert.That("A", Is.EqualTo("A"), "Expected text differs");
+    }
+
+    [Test]
+    public void TestC()
+    {
+      Assert.That("A", Is.EqualTo("A"), "Expected text differs");
+    }
   }
 }
