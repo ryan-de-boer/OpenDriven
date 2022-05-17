@@ -1,4 +1,6 @@
 ﻿using EnvDTE;
+using Microsoft.VisualStudio.Shell.Interop;
+using OpenDriven.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -86,6 +88,18 @@ namespace OpenDriven
 
     public static void Debug(string fileName, string testWithNamespace, DTE dte)
     {
+      if (dte.Solution.SolutionBuild.ActiveConfiguration.Name.ToLower().Contains("release"))
+      {
+        VsShellUtilities.ShowMessageBox(
+            DebugTestsCommand.s_package,
+            "Please select debug configuration",
+            "Release mode detected",
+            OLEMSGICON.OLEMSGICON_INFO,
+            OLEMSGBUTTON.OLEMSGBUTTON_OK,
+            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        return;
+      }
+
       System.Diagnostics.Process process;
       if (DotNetFramework(fileName))
       {

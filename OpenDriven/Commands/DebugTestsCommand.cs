@@ -35,6 +35,8 @@ namespace OpenDriven.Commands
     /// </summary>
     private readonly AsyncPackage package;
 
+    public static AsyncPackage s_package;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DebugTestsCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
@@ -44,6 +46,7 @@ namespace OpenDriven.Commands
     private DebugTestsCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
       this.package = package ?? throw new ArgumentNullException(nameof(package));
+      s_package = package;
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
       var menuCommandID = new CommandID(CommandSet, CommandId);
