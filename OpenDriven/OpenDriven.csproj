@@ -51,6 +51,7 @@
     <Compile Include="Commands\RunFileTestsCommand.cs" />
     <Compile Include="Commands\RunFolderTestsCommand.cs" />
     <Compile Include="Commands\RunProjectTestsCommand.cs" />
+    <Compile Include="Commands\RunSolutionTestsCommand.cs" />
     <Compile Include="Commands\RunTestsCommand.cs" />
     <Compile Include="Commands\DebugTestsCommand.cs" />
     <Compile Include="Commands\ToolbarOpenReportFailedCommand.cs" />
@@ -133,6 +134,7 @@
     <Content Include="Commands\Resources\RunFileTestsCommand.png" />
     <Content Include="Commands\Resources\RunFolderTestsCommand.png" />
     <Content Include="Commands\Resources\RunProjectTestsCommand.png" />
+    <Content Include="Commands\Resources\RunSolutionTestsCommand.png" />
     <Content Include="Commands\Resources\ToolbarCommand2.png" />
     <Content Include="Commands\Resources\ToolbarDebugLastCommand.png" />
     <Content Include="Commands\Resources\ToolbarRunLastCommand.png" />

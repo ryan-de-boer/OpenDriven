@@ -106,6 +106,7 @@ namespace OpenDriven
         await OpenDriven.Commands.DebugProjectTestsCommand.InitializeAsync(this);
         await OpenDriven.Commands.RunFolderTestsCommand.InitializeAsync(this);
         await OpenDriven.Commands.DebugFolderTestsCommand.InitializeAsync(this);
+        await OpenDriven.Commands.RunSolutionTestsCommand.InitializeAsync(this);
       
 
 

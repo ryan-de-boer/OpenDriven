@@ -27,38 +27,8 @@ namespace OpenDriven
         public const string guidImages2String = "5073aeb6-8505-4b2c-b192-6d82c83d9029";
         public static Guid guidImages2 = new Guid(guidImages2String);
 
-        public const string guidImages3String = "260618dd-2a75-4fcc-9b22-f81799f19273";
-        public static Guid guidImages3 = new Guid(guidImages3String);
-
-        public const string guidImages4String = "b5c6b537-5999-408a-8927-8978cd90f42e";
-        public static Guid guidImages4 = new Guid(guidImages4String);
-
-        public const string guidImages5String = "f4cbb13d-c291-4005-adeb-48d03357f33c";
-        public static Guid guidImages5 = new Guid(guidImages5String);
-
-        public const string guidImages6String = "fd6367ca-2302-4f53-a81a-a807c7a0d7ff";
-        public static Guid guidImages6 = new Guid(guidImages6String);
-
-        public const string guidImages7String = "bd19acc3-46d9-41d5-bbb1-51f7ee79b81c";
-        public static Guid guidImages7 = new Guid(guidImages7String);
-
-        public const string guidImages8String = "6333bd8b-d41d-4f58-b085-a197581c526a";
-        public static Guid guidImages8 = new Guid(guidImages8String);
-
         public const string guidOpenDrivenPackageCmdSet1String = "23807277-b10c-4815-af55-28c7a85ddc34";
         public static Guid guidOpenDrivenPackageCmdSet1 = new Guid(guidOpenDrivenPackageCmdSet1String);
-
-        public const string guidImages9String = "686a9bc8-d6e2-488b-83f2-4fd6864278f0";
-        public static Guid guidImages9 = new Guid(guidImages9String);
-
-        public const string guidImages10String = "63b32afd-bcba-4322-831b-90aa22626402";
-        public static Guid guidImages10 = new Guid(guidImages10String);
-
-        public const string guidImages11String = "6b9723ee-098b-4de6-a7ef-ce544c368215";
-        public static Guid guidImages11 = new Guid(guidImages11String);
-
-        public const string guidImages12String = "5a2b1075-0f95-49df-a716-d82c9e4d8384";
-        public static Guid guidImages12 = new Guid(guidImages12String);
     }
     /// <summary>
     /// Helper class that encapsulates all CommandIDs uses across VS Package.
@@ -71,6 +41,7 @@ namespace OpenDriven
         public const int ItemMenuGroup = 0x1022;
         public const int ProjectMenuGroup = 0x1023;
         public const int FolderMenuGroup = 0x1024;
+        public const int SolutionMenuGroup = 0x1025;
         public const int cmdidCommand1 = 0x0100;
         public const int cmdidDebugCommand = 0x0101;
         public const int cmdidToolbarTestCommand = 0x1021;
@@ -81,16 +52,29 @@ namespace OpenDriven
         public const int cmdidToolbarDebugLastCommand = 0x1053;
         public const int cmdidRunFileTestsCommand = 0x1054;
         public const int cmdidDebugFileTestsCommand = 0x1055;
+        public const int guidImages_bmpPic1 = 0x0001;
+        public const int guidImages_bmpPic2 = 0x0002;
+        public const int guidImages_bmpPicSearch = 0x0003;
+        public const int guidImages_bmpPicX = 0x0004;
+        public const int guidImages_bmpPicArrows = 0x0005;
+        public const int guidImages_bmpPicStrikethrough = 0x0006;
+        public const int guidImages1_bmpPic1 = 0x0001;
+        public const int guidImages1_bmpPic2 = 0x0002;
+        public const int guidImages1_bmpPicSearch = 0x0003;
+        public const int guidImages1_bmpPicX = 0x0004;
+        public const int guidImages1_bmpPicArrows = 0x0005;
+        public const int guidImages1_bmpPicStrikethrough = 0x0006;
+        public const int guidImages2_bmpPic1 = 0x0001;
+        public const int guidImages2_bmpPic2 = 0x0002;
+        public const int guidImages2_bmpPicSearch = 0x0003;
+        public const int guidImages2_bmpPicX = 0x0004;
+        public const int guidImages2_bmpPicArrows = 0x0005;
+        public const int guidImages2_bmpPicStrikethrough = 0x0006;
+        public const int MyMenuGroup = 0x1020;
         public const int cmdidRunProjectTestsCommand = 0x0100;
         public const int cmdidDebugProjectTestsCommand = 0x1021;
-        public const int bmpPic1 = 0x0001;
-        public const int bmpPic2 = 0x0002;
-        public const int bmpPicSearch = 0x0003;
-        public const int bmpPicX = 0x0004;
-        public const int bmpPicArrows = 0x0005;
-        public const int bmpPicStrikethrough = 0x0006;
-        public const int MyMenuGroup = 0x1020;
         public const int cmdidRunFolderTestsCommand = 0x1022;
         public const int cmdidDebugFolderTestsCommand = 0x1023;
+        public const int cmdidRunSolutionTestsCommand = 0x1024;
     }
 }

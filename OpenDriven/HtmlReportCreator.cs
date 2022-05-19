@@ -64,6 +64,54 @@ namespace OpenDriven
     }
 
     /// <summary>
+    /// Parses the supplied TestResults folder. It should contain all the "*_TestResult.xml" files that are output 
+    /// from nunit console runner in v2 format. It outputs a single TestReport.html file you can open in your 
+    /// preferred browser.
+    /// </summary>
+    /// <param name="folder">TestResults folder. It should contain all the "*_TestResult.xml" files that are output 
+    /// from nunit console runner in v2 format.</param>
+    public static void ParseUnitTestResultsFolderStarXml(string folder)
+    {
+      const string header = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\r\n<testsuites>\r\n";
+      const string footer = "</testsuites>\r\n";
+
+      string[] files = Directory.GetFiles(folder, "*.xml");
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.Append(header);
+      foreach (string file in files)
+      {
+        MsXsl(file);
+
+        // We combine all the junit outputs into one big report.
+        string junitOutput = File.ReadAllText("C:\\Program Files\\OpenDriven\\junit-output.xml");
+        junitOutput = junitOutput.Replace(header, "");
+        junitOutput = junitOutput.Replace(footer, "");
+        // Some of the failure messages did not look very nice, so we replace them with nicer text so it is still 
+        // compatible with our xsl files.
+        junitOutput = junitOutput.Replace("<failure>\r\nMESSAGE:\r\n", "<failure>");
+        junitOutput = junitOutput.Replace("+++++++++++++++++++\r\nSTACK TRACE:\r\n</failure>", "</failure>");
+        junitOutput = junitOutput.Replace("\r\n\r\n+++++++++++++++++++\r\nSTACK TRACE:", "\r\n\r\nStack Trace:");
+        junitOutput = junitOutput.Replace("+++++++++++++++++++\r\nSTACK TRACE:", "\r\nStack Trace:");
+        stringBuilder.Append(junitOutput);
+      }
+      stringBuilder.Append(footer);
+      File.WriteAllText("C:\\Program Files\\OpenDriven\\junit-output.xml", stringBuilder.ToString(), Encoding.Unicode);
+
+      string testReportPath = Path.Combine("C:\\Program Files\\OpenDriven", "TestReport.html");
+      if (File.Exists(testReportPath))
+      {
+        File.Delete(testReportPath);
+      }
+      MsXslCombinedTestReport("C:\\Program Files\\OpenDriven\\junit-output.xml", testReportPath);
+      string multiPath = Path.Combine(folder, "TestReport.html");
+      if (File.Exists (multiPath))
+      {
+        File.Delete(multiPath);
+      }
+      File.Copy(testReportPath, multiPath);
+    }
+
+    /// <summary>
     /// Uses microsofts command line xsl transformation tool to convert supplied nunit v2 xml format into a junit xml format.
     /// https://www.microsoft.com/en-au/download/details.aspx?id=21714
     /// </summary>
