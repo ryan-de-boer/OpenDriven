@@ -130,6 +130,12 @@ namespace OpenDriven.Commands
         return;
       }
 
+      if (testWithNamespace== "_SOLUTION_")
+      {
+        RunSolutionTestsCommand.Run();
+        return;
+      }
+
       Track.TrackFile();
       EnvDTE.Project _selectedProject1 = null;
       Array _projects = DebugTestsCommand.s_dte.ActiveSolutionProjects as Array;

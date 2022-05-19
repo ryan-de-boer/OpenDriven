@@ -35,6 +35,8 @@ namespace OpenDriven.Commands
     /// </summary>
     private readonly AsyncPackage package;
 
+    private static AsyncPackage s_package;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RunSolutionTestsCommand"/> class.
     /// Adds our command handlers for menu (commands must exist in the command table file)
@@ -44,6 +46,7 @@ namespace OpenDriven.Commands
     private RunSolutionTestsCommand(AsyncPackage package, OleMenuCommandService commandService)
     {
       this.package = package ?? throw new ArgumentNullException(nameof(package));
+      s_package = package;
       commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
       var menuCommandID = new CommandID(CommandSet, CommandId);
@@ -140,11 +143,13 @@ namespace OpenDriven.Commands
       return list;
     }
 
+
     public const string guidOpenDrivenPackageCmdSet = "c5bccf32-96d1-4e8a-93b2-a9c56ea803d9";
-    public bool ChangeMyCommand(int cmdID, bool enableCmd)
+    public static bool ChangeMyCommand(int cmdID, bool enableCmd)
     {
       bool cmdUpdated = false;
-      System.IServiceProvider serviceProvider = package as System.IServiceProvider;
+      //      System.IServiceProvider serviceProvider = package as System.IServiceProvider;
+      System.IServiceProvider serviceProvider = s_package as System.IServiceProvider;
       OleMenuCommandService mcs = (OleMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
       var newCmdID = new CommandID(new Guid(guidOpenDrivenPackageCmdSet), cmdID);
       MenuCommand mc = mcs.FindCommand(newCmdID);
@@ -159,20 +164,8 @@ namespace OpenDriven.Commands
       return cmdUpdated;
     }
 
-
-    /// <summary>
-    /// This function is the callback used to execute the command when the menu item is clicked.
-    /// See the constructor to see how the menu item is associated with this function using
-    /// OleMenuCommandService service and MenuCommand class.
-    /// </summary>
-    /// <param name="sender">Event sender.</param>
-    /// <param name="e">Event args.</param>
-    private void Execute(object sender, EventArgs e)
+    public static void Run()
     {
-      ThreadHelper.ThrowIfNotOnUIThread();
-      string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()\r\n", this.GetType().FullName);
-      string title = "RunSolutionTestsCommand";
-
       BuildSln();
 
       var projects = GetProjects(DebugTestsCommand.s_dte.Solution);
@@ -183,7 +176,7 @@ namespace OpenDriven.Commands
       List<string> names = new List<string>();
       foreach (var p in projects)
       {
-        if (p.FileName.Trim()=="" && p.Kind== "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}") //solution folders
+        if (p.FileName.Trim() == "" && p.Kind == "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}") //solution folders
         {
           int c = 1;
           c++;
@@ -208,7 +201,7 @@ namespace OpenDriven.Commands
       }
 
       Solution2 soln = (Solution2)DebugTestsCommand.s_dte.Solution;
-      
+
       File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{soln.FileName}|_SOLUTION_");
 
       string multiDir = "C:\\Program Files\\OpenDriven\\Multi";
@@ -244,7 +237,7 @@ namespace OpenDriven.Commands
           Directory.CreateDirectory(multiDir);
         }
         string outputFile = "C:\\Program Files\\OpenDriven\\output.xml";
-        string destFile = Path.Combine(multiDir, names[i]+".xml");
+        string destFile = Path.Combine(multiDir, names[i] + ".xml");
         File.Copy(outputFile, destFile);
 
         EnvDTE.OutputWindowPane owp;
@@ -309,6 +302,22 @@ namespace OpenDriven.Commands
         //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
         //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
       }
+    }
+
+    /// <summary>
+    /// This function is the callback used to execute the command when the menu item is clicked.
+    /// See the constructor to see how the menu item is associated with this function using
+    /// OleMenuCommandService service and MenuCommand class.
+    /// </summary>
+    /// <param name="sender">Event sender.</param>
+    /// <param name="e">Event args.</param>
+    private void Execute(object sender, EventArgs e)
+    {
+      ThreadHelper.ThrowIfNotOnUIThread();
+      string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()\r\n", this.GetType().FullName);
+      string title = "RunSolutionTestsCommand";
+
+      Run();
 
       /*
       // Show a message box to prove we were here
