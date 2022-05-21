@@ -3,11 +3,13 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +50,9 @@ namespace OpenDriven.Commands
       //     var menuItem = new MenuCommand(this.Execute, menuCommandID);
 
       var menuItem = new OleMenuCommand(this.Execute, menuCommandID);
-      menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
+      //menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
+      menuItem.Visible = true;
+      menuItem.Enabled = true;
 
       commandService.AddCommand(menuItem);
     }
@@ -203,7 +207,114 @@ namespace OpenDriven.Commands
         fileName = DebugTestsCommand.GetAssemblyPath(_selectedProject);
 
       }
+      StringBuilder sb = new StringBuilder();
+      List<string> itemPaths = new List<string>();
+      foreach (EnvDTE.SelectedItem selectedItem in DebugTestsCommand.s_dte.SelectedItems)
+      {
+        if (selectedItem.ProjectItem is ProjectItem)
+        {
+          string itemPath = ((ProjectItem)selectedItem.ProjectItem).FileNames[0];
+          sb.AppendLine(itemPath);
+          itemPaths.Add(itemPath);
+        }
+      }
+      
+      if (itemPaths.Count > 0)
+      {
+        List<string> classesWithNamespaces = new List<string>();
+        foreach (string itemPath in itemPaths)
+        {
+          string oneClassWithNamespace = DebugTestsCommand.ExtractNamespaceClass(File.ReadAllText(itemPath));
+          classesWithNamespaces.Add(oneClassWithNamespace);
+        }
+        string joinString = string.Join(",", classesWithNamespaces);
 
+        File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{fileName}|{joinString}");
+
+        DebugTestsCommand.Build(_selectedProject1);
+
+        string output1 = RunTests.Run(fileName, joinString);
+
+        Window window1 = DebugTestsCommand.s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+        OutputWindow outputWindow1 = (OutputWindow)window1.Object;
+        EnvDTE.OutputWindowPane owp1;
+        bool found1 = false;
+        foreach (EnvDTE.OutputWindowPane x in outputWindow1.OutputWindowPanes)
+        {
+          if (x.Name == "Test Output")
+          {
+            x.Activate();
+            x.Clear();
+            x.OutputString(output1);
+            found1 = true;
+            break;
+          }
+        }
+        if (!found1)
+        {
+          owp1 = outputWindow1.OutputWindowPanes.Add("Test Output");
+          owp1.OutputString(output1);
+        }
+
+        HtmlReportCreator.ParseUnitTestResultsFolder("C:\\Program Files\\OpenDriven");
+
+        if (output1.Contains("Failed: 0,") && output1.Contains("Overall result: Passed"))
+        {
+          File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "PASS");
+
+          ChangeMyCommand(4129, true);
+          ChangeMyCommand(4177, false);
+
+          PassDialog dialog = new PassDialog();
+          dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+          dialog.Show();
+
+          //VsShellUtilities.ShowMessageBox(
+          //  this.package,
+          //  "PASS",
+          //  "Test Result",
+          //  OLEMSGICON.OLEMSGICON_INFO,
+          //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
+          //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        }
+        else
+        {
+          File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTestResult.txt", "FAIL");
+
+          ChangeMyCommand(4129, false);
+          ChangeMyCommand(4177, true);
+
+
+
+          FailDialog dialog = new FailDialog();
+          dialog.ErrorTextBox.Text = RunTestsCommand.GetError();
+          dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+          dialog.Show();
+
+          //VsShellUtilities.ShowMessageBox(
+          //  this.package,
+          //  "FAIL",
+          //  "Test Result",
+          //  OLEMSGICON.OLEMSGICON_CRITICAL,
+          //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
+          //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        }
+
+        int a1 = 1;
+        a1++;
+
+        //VsShellUtilities.ShowMessageBox(
+        //    this.package,
+        //    message + "\r\n" + sb.ToString(),
+        //    title,
+        //    OLEMSGICON.OLEMSGICON_INFO,
+        //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+        //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+
+        return;
+      }
+
+      // 1 path.
 
       IVsHierarchy hierarchy = null;
       uint itemid = VSConstants.VSITEMID_NIL;

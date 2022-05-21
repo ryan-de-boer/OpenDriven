@@ -56,23 +56,23 @@ namespace OpenDriven.Commands
       var menuCommand = sender as OleMenuCommand;
       if (menuCommand != null)
       {
-        // start by assuming that the menu will not be shown
-        menuCommand.Visible = false;
-        menuCommand.Enabled = false;
+        //// start by assuming that the menu will not be shown
+        //menuCommand.Visible = false;
+        //menuCommand.Enabled = false;
 
-        IVsHierarchy hierarchy = null;
-        uint itemid = VSConstants.VSITEMID_NIL;
+        //IVsHierarchy hierarchy = null;
+        //uint itemid = VSConstants.VSITEMID_NIL;
 
-        if (!RunFileTestsCommand.IsSingleProjectItemSelection(out hierarchy, out itemid)) return;
-        // Get the file path
-        string itemFullPath = null;
-        ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
+        //if (!RunFileTestsCommand.IsSingleProjectItemSelection(out hierarchy, out itemid)) return;
+        //// Get the file path
+        //string itemFullPath = null;
+        //((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
 
-        // then check if the file is named '*cs'
-        bool isCs = itemFullPath.EndsWith(".cs");
+        //// then check if the file is named '*cs'
+        //bool isCs = itemFullPath.EndsWith(".cs");
 
-        // if not leave the menu hidden
-        if (!isCs) return;
+        //// if not leave the menu hidden
+        //if (!isCs) return;
 
         menuCommand.Visible = true;
         menuCommand.Enabled = true;

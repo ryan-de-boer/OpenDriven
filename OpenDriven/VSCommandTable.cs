@@ -18,6 +18,27 @@ namespace OpenDriven
         public const string guidOpenDrivenPackageCmdSetString = "c5bccf32-96d1-4e8a-93b2-a9c56ea803d9";
         public static Guid guidOpenDrivenPackageCmdSet = new Guid(guidOpenDrivenPackageCmdSetString);
 
+        public const string HtmlEditorWindowsString = "d7e8c5e1-bdb8-11d0-9c88-0000f8040a53";
+        public static Guid HtmlEditorWindows = new Guid(HtmlEditorWindowsString);
+
+        public const string XamlEditorWindowsString = "4c87b692-1202-46aa-b64c-ef01faec53da";
+        public static Guid XamlEditorWindows = new Guid(XamlEditorWindowsString);
+
+        public const string CshtmlEditorWindowsString = "78f03954-2fb8-4087-8ce7-59d71710b3bb";
+        public static Guid CshtmlEditorWindows = new Guid(CshtmlEditorWindowsString);
+
+        public const string CssEditor1String = "a764e896-518d-11d2-9a89-00c04f79efc3";
+        public static Guid CssEditor1 = new Guid(CssEditor1String);
+
+        public const string CssEditor2String = "64da400e-b4ad-4d67-aa92-4b7acb01ecd5";
+        public static Guid CssEditor2 = new Guid(CssEditor2String);
+
+        public const string CssEditor3String = "0f070e29-dccd-4f83-8329-c3d4b29474ae";
+        public static Guid CssEditor3 = new Guid(CssEditor3String);
+
+        public const string JSONEditorContextMenuString = "f718ca06-cf4f-4a0c-9106-e79e9ee5e7cd";
+        public static Guid JSONEditorContextMenu = new Guid(JSONEditorContextMenuString);
+
         public const string guidImagesString = "d65142af-d736-4826-8f66-fb14c9c96117";
         public static Guid guidImages = new Guid(guidImagesString);
 
@@ -42,6 +63,8 @@ namespace OpenDriven
         public const int ProjectMenuGroup = 0x1023;
         public const int FolderMenuGroup = 0x1024;
         public const int SolutionMenuGroup = 0x1025;
+        public const int MultiProjectMenuGroup = 0x1026;
+        public const int MultiItemMenuGroup = 0x1027;
         public const int cmdidCommand1 = 0x0100;
         public const int cmdidDebugCommand = 0x0101;
         public const int cmdidToolbarTestCommand = 0x1021;
@@ -52,6 +75,24 @@ namespace OpenDriven
         public const int cmdidToolbarDebugLastCommand = 0x1053;
         public const int cmdidRunFileTestsCommand = 0x1054;
         public const int cmdidDebugFileTestsCommand = 0x1055;
+        public const int IDMX_HTM_SOURCE_BASIC = 0x0032;
+        public const int IDMX_HTM_SOURCE_HTML = 0x0033;
+        public const int IDMX_HTM_SOURCE_SCRIPT = 0x0034;
+        public const int IDMX_HTM_SOURCE_ASPX = 0x0035;
+        public const int IDMX_HTM_SOURCE_ASPX_CODE = 0x0036;
+        public const int IDMX_HTM_SOURCE_ASPX_CODE_VB = 0x0037;
+        public const int IDMX_HTM_SOURCE_ASMX_CODE = 0x0038;
+        public const int IDMX_HTM_SOURCE_ASMX_CODE_VB = 0x0039;
+        public const int IDMX_HTM_SOURCE_ASAX = 0x003B;
+        public const int IDMX_HTM_SOURCE_ASAX_CODE = 0x003C;
+        public const int IDMX_HTM_SOURCE_ASAX_CODE_VB = 0x003D;
+        public const int IDMX_XAML_SOURCE_BASIC = 0x0103;
+        public const int IDM_HTMLCTXMENU = 0x0001;
+        public const int IDM_CTX_SOURCE = 0x0102;
+        public const int IDMX_CSS_SOURCE = 0x0002;
+        public const int IDMX_HTM_SOURCE_CSS = 0x0102;
+        public const int IDJSONEditorContextMenu1 = 0x0001;
+        public const int IDJSONEditorContextMenu3 = 0x0003;
         public const int guidImages_bmpPic1 = 0x0001;
         public const int guidImages_bmpPic2 = 0x0002;
         public const int guidImages_bmpPicSearch = 0x0003;
@@ -76,5 +117,7 @@ namespace OpenDriven
         public const int cmdidRunFolderTestsCommand = 0x1022;
         public const int cmdidDebugFolderTestsCommand = 0x1023;
         public const int cmdidRunSolutionTestsCommand = 0x1024;
+        public const int cmdidRunMultiProjectTestsCommand = 0x1025;
+        public const int cmdidRunMultiItemTestsCommand = 0x1026;
     }
 }

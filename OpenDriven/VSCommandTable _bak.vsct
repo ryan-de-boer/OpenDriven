@@ -117,6 +117,8 @@
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidRunFileTestsCommand" priority="0x0100" type="Button">
         <Parent guid="guidOpenDrivenPackageCmdSet" id="ItemMenuGroup" />
         <Icon guid="guidImages" id="guidImages_bmpPic1" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Run Test(s)</ButtonText>
         </Strings>
@@ -124,6 +126,8 @@
       <Button guid="guidOpenDrivenPackageCmdSet" id="cmdidDebugFileTestsCommand" priority="0x0100" type="Button">
         <Parent guid="guidOpenDrivenPackageCmdSet" id="ItemMenuGroup" />
         <Icon guid="guidImages1" id="guidImages1_bmpPic1" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Debug Test(s)</ButtonText>
         </Strings>
@@ -170,6 +174,13 @@
           <ButtonText>Invoke RunMultiProjectTestsCommand</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidOpenDrivenPackageCmdSet1" id="cmdidRunMultiItemTestsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" />
+        <Icon guid="guidImages" id="guidImages_bmpPic1" />
+        <Strings>
+          <ButtonText>Invoke RunMultiItemTestsCommand</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     <Bitmaps>
       <Bitmap guid="guidImages" href="Commands\Resources\Command1.png" usedList="guidImages_bmpPic1, guidImages_bmpPic2, guidImages_bmpPicSearch, guidImages_bmpPicX, guidImages_bmpPicArrows, guidImages_bmpPicStrikethrough" />
@@ -179,10 +190,70 @@
 
   <CommandPlacements>
     <!--Solution Explorer nodes-->
-    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0100">
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id ="IDM_VS_CTXT_PROJNODE"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
       <Parent guid="guidSHLMainMenu" id ="IDM_VS_CTXT_ITEMNODE"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id ="IDM_VS_CTXT_FOLDERNODE"/>
+    </CommandPlacement>
 
+    <!--Document tabs-->
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id ="IDM_VS_CTXT_EZDOCWINTAB"/>
+    </CommandPlacement>
+
+    <!--Code editor windows-->
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="guidSHLMainMenu" id ="IDM_VS_CTXT_CODEWIN"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_BASIC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_SCRIPT" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_ASPX" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_ASAX" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_ASPX_CODE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_ASAX_CODE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_ASMX_CODE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="XamlEditorWindows" id="IDMX_XAML_SOURCE_BASIC" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="CshtmlEditorWindows" id="IDM_HTMLCTXMENU" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="CssEditor1" id="IDM_CTX_SOURCE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="CssEditor2" id="IDMX_CSS_SOURCE" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="CssEditor3" id="IDMX_HTM_SOURCE_CSS" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="JSONEditorContextMenu" id ="IDJSONEditorContextMenu1"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidOpenDrivenPackageCmdSet" id="MultiItemMenuGroup" priority="0x0001">
+      <Parent guid="JSONEditorContextMenu" id ="IDJSONEditorContextMenu3"/>
+    </CommandPlacement>
   </CommandPlacements>
 
   <Symbols>

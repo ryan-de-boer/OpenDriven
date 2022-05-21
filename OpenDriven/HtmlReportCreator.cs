@@ -60,6 +60,7 @@ namespace OpenDriven
         File.Delete(testReportPath);
       }
       MsXslCombinedTestReport(junitOutputFile, testReportPath);
+      FixTestReport(testReportPath);
  //     File.Copy(testReportPath, Path.Combine(folder, "TestReport.html"));
     }
 
@@ -109,6 +110,13 @@ namespace OpenDriven
         File.Delete(multiPath);
       }
       File.Copy(testReportPath, multiPath);
+      FixTestReport(testReportPath);
+      FixTestReport(multiPath);
+    }
+
+    private static void FixTestReport(string testReportPath)
+    {
+      File.WriteAllText(testReportPath, File.ReadAllText(testReportPath).Replace("verdana,", ""));
     }
 
     /// <summary>
