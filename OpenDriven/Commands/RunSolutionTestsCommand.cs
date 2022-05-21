@@ -126,7 +126,7 @@ namespace OpenDriven.Commands
     /// </summary>
     /// <param name="sln">Solution</param>
     /// <returns>List of projects</returns>
-    static List<Project> GetProjects(EnvDTE.Solution sln)
+    public static List<Project> GetProjects(EnvDTE.Solution sln)
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       List<Project> list = new List<Project>();

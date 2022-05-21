@@ -167,7 +167,7 @@
         <Parent guid="guidOpenDrivenPackageCmdSet" id="MultiProjectMenuGroup" />
         <Icon guid="guidImages" id="guidImages_bmpPic1" />
         <Strings>
-          <ButtonText>Invoke RunMultiProjectTestsCommand</ButtonText>
+          <ButtonText>Run Test(s)</ButtonText>
         </Strings>
       </Button>
     </Buttons>

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
@@ -96,7 +97,17 @@ namespace OpenDriven.Commands
 
       string fileName = "";
       string testWithNamespace = "";
-      if (File.Exists(@"C:\Program Files\OpenDriven\LastRunTest.txt"))
+
+      string lastRunTestFile = @"C:\Program Files\OpenDriven\LastRunTest.txt";
+
+      List<string> paths = RunMultiProjectTestsCommand.ExtractPaths(File.ReadAllText(lastRunTestFile), out int numProjects);
+      if (numProjects>=2)
+      {
+        RunMultiProjectTestsCommand.Run(paths);
+        return;
+      }
+
+      if (File.Exists(lastRunTestFile))
       {
         // $"{fileName}|{testWithNamespace}"
         string[] tokens = File.ReadAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt").Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
@@ -153,6 +164,20 @@ namespace OpenDriven.Commands
         }
       }
 
+      if (_selectedProject1==null)
+      {
+        List<EnvDTE.Project> projects = RunSolutionTestsCommand.GetProjects(DebugTestsCommand.s_dte.Solution);
+        foreach (EnvDTE.Project project in projects)
+        {
+          string pOutfileName = DebugTestsCommand.GetAssemblyPath(project);
+          if (pOutfileName == fileName)
+          {
+            _selectedProject1 = project;
+            break;
+          }
+        }
+      }
+
       DebugTestsCommand.Build(_selectedProject1);
 
       string output = RunTests.Run(fileName, testWithNamespace);
@@ -180,6 +205,7 @@ namespace OpenDriven.Commands
         owp.OutputString(output);
       }
 
+      HtmlReportCreator.ParseUnitTestResultsFolder("C:\\Program Files\\OpenDriven");
 
       if (output.Contains("Failed: 0,") && output.Contains("Overall result: Passed"))
       {

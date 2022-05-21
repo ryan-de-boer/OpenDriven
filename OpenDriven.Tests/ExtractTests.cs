@@ -25,5 +25,22 @@ namespace OpenDriven.Tests
 
       Assert.That(actualNamespaceTest, Is.EqualTo(expectedNamespaceTest), "Expected namespace text differs");
     }
+
+    [Test]
+    public void TestLastRunMultiProject()
+    {
+      string text = File.ReadAllText(@"D:\code\other\OpenDriven\git\OpenDriven\OpenDriven.Tests\TestData\LastRunTest.txt");
+
+      List<string> expectedPaths = new List<string>();
+      expectedPaths.Add(@"D:\code\other\OpenDriven\git\OpenDriven\OpenDriven.5.Tests\bin\Debug\net5.0\OpenDriven.5.Tests.dll");
+      expectedPaths.Add(@"D:\code\other\OpenDriven\git\OpenDriven\OpenDriven.Framework35.Tests\bin\Debug\OpenDriven.Framework35.Tests.dll");
+
+      List<string> actualPaths = RunMultiProjectTestsCommand.ExtractPaths(text, out int numProjects);
+
+      Assert.That(numProjects, Is.EqualTo(2), "Expected numProjects differs");
+      Assert.That(actualPaths, Is.EqualTo(expectedPaths), "Expected paths differs");
+    }
+
+
   }
 }

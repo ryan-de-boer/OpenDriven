@@ -1,0 +1,2 @@
+D:\code\other\OpenDriven\git\OpenDriven\OpenDriven.5.Tests\bin\Debug\net5.0\OpenDriven.5.Tests.dll|_PROJECT_
+D:\code\other\OpenDriven\git\OpenDriven\OpenDriven.Framework35.Tests\bin\Debug\OpenDriven.Framework35.Tests.dll|_PROJECT_
