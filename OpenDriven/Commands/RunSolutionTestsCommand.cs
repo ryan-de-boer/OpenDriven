@@ -166,9 +166,12 @@ namespace OpenDriven.Commands
 
     public static void Run()
     {
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand Run");
       BuildSln();
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 2");
 
       var projects = GetProjects(DebugTestsCommand.s_dte.Solution);
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 3");
 
       StringBuilder sb = new StringBuilder();
       List<string> fileNames = new List<string>();
@@ -176,14 +179,16 @@ namespace OpenDriven.Commands
       List<string> names = new List<string>();
       foreach (var p in projects)
       {
-        if (p.FileName.Trim() == "" && p.Kind == "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}") //solution folders
+        if (p.FileName.Trim() == "" || p.Kind == "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}") //solution folders
         {
           int c = 1;
           c++;
         }
         else
         {
+          System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 3.1 {p.FileName}");
           string contents = File.ReadAllText(p.FileName);
+          System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 3.2");
           if (contents.Contains("Reference Include=\"nunit.framework") || contents.Contains("PackageReference Include=\"NUnit\""))
           {
             string assemblyPath = DebugTestsCommand.GetAssemblyPath(p);
@@ -199,6 +204,7 @@ namespace OpenDriven.Commands
 
         }
       }
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 4");
 
       Solution2 soln = (Solution2)DebugTestsCommand.s_dte.Solution;
 
@@ -209,6 +215,7 @@ namespace OpenDriven.Commands
       {
         Directory.Delete(multiDir, true);
       }
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 5");
 
       Window window = DebugTestsCommand.s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
       OutputWindow outputWindow = (OutputWindow)window.Object;
@@ -221,6 +228,7 @@ namespace OpenDriven.Commands
           break;
         }
       }
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 6");
 
       bool failed = true;
       for (int i = 0; i < assemblyPaths.Count; i++)
@@ -259,7 +267,10 @@ namespace OpenDriven.Commands
         }
       }
 
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 7");
+
       HtmlReportCreator.ParseUnitTestResultsFolderStarXml("C:\\Program Files\\OpenDriven\\Multi");
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 8");
 
       if (!failed)
       {
@@ -302,6 +313,8 @@ namespace OpenDriven.Commands
         //  OLEMSGBUTTON.OLEMSGBUTTON_OK,
         //  OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
       }
+      System.Diagnostics.Trace.WriteLine($"RunSolutionTestsCommand 9");
+
     }
 
     /// <summary>

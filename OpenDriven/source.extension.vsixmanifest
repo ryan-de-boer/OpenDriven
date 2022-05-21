@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="OpenDriven.4d960ed5-8728-4be3-8261-5619a2b7aa7f" Version="0.142" Language="en-US" Publisher="Ryan De Boer" />
+        <Identity Id="OpenDriven.4d960ed5-8728-4be3-8261-5619a2b7aa7f" Version="0.1423" Language="en-US" Publisher="Ryan De Boer" />
         <DisplayName>OpenDriven</DisplayName>
         <Description xml:space="preserve">Debugging and running of nunit tests in VS2022 (Similar to TestDriven.NET)</Description>
         <Icon>Resources\Icon.png</Icon>

@@ -107,7 +107,7 @@ namespace OpenDriven.Commands
       List<EnvDTE.Project> projects = RunSolutionTestsCommand.GetProjects(DebugTestsCommand.s_dte.Solution);
       foreach (EnvDTE.Project project in projects)
       {
-        if (project.FileName.Trim() == "" && project.Kind == "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}") //solution folders
+        if (project.FileName.Trim() == "" || project.Kind == "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}") //solution folders
         {
           int c = 1;
           c++;
