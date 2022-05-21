@@ -1,10 +1,13 @@
-﻿using Microsoft.VisualStudio;
+﻿using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -137,8 +140,46 @@ namespace OpenDriven.Commands
         //get the project path
 
         fileName = DebugTestsCommand.GetAssemblyPath(_selectedProject);
-
       }
+
+      StringBuilder sb = new StringBuilder();
+      List<string> itemPaths = new List<string>();
+      foreach (EnvDTE.SelectedItem selectedItem in DebugTestsCommand.s_dte.SelectedItems)
+      {
+        if (selectedItem.ProjectItem is ProjectItem)
+        {
+          string itemPath = ((ProjectItem)selectedItem.ProjectItem).FileNames[0];
+          sb.AppendLine(itemPath);
+          itemPaths.Add(itemPath);
+        }
+      }
+
+      if (itemPaths.Count > 0)
+      {
+        List<string> classesWithNamespaces = new List<string>();
+        foreach (string itemPath in itemPaths)
+        {
+          string oneClassWithNamespace = DebugTestsCommand.ExtractNamespaceClass(File.ReadAllText(itemPath));
+          classesWithNamespaces.Add(oneClassWithNamespace);
+        }
+        string joinString = string.Join(",", classesWithNamespaces);
+
+        File.WriteAllText(@"C:\Program Files\OpenDriven\LastDebugTest.txt", $"{fileName}|{joinString}");
+
+        DebugTests.PreDebug();
+
+        DebugTestsCommand.Build(_selectedProject1);
+
+        DebugTests.Debug(fileName, joinString, DebugTestsCommand.s_dte);
+
+        int a1 = 1;
+        a1++;
+
+
+        return;
+      }
+
+      // 1 path
 
       IVsHierarchy hierarchy = null;
       uint itemid = VSConstants.VSITEMID_NIL;
