@@ -175,6 +175,10 @@ namespace OpenDriven.Commands
       DebugTestsCommand.Build(_selectedProject1);
 
       string output = RunTests.Run(fileName, testWithNamespace);
+      if (output.Contains("BadImageFormatException"))
+      {
+        output = RunTests.Run(fileName, testWithNamespace, true);
+      }
 
       Window window = s_dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
       OutputWindow outputWindow = (OutputWindow)window.Object;

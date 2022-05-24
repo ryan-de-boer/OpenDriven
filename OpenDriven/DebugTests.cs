@@ -56,13 +56,17 @@ namespace OpenDriven
     }
 
     //https://docs.microsoft.com/en-us/dotnet/api/envdte.process.attach?view=visualstudiosdk-2022
-    public static void Attach(DTE dte)
+    public static void Attach(DTE dte, bool x86 = false)
     {
       ThreadHelper.ThrowIfNotOnUIThread();
       EnvDTE.Processes processes = dte.Debugger.LocalProcesses;
       foreach (EnvDTE.Process proc in processes)
-        if (proc.Name.IndexOf("nunit-agent.exe") != -1)
+      {
+        if ((!x86 && proc.Name.IndexOf("nunit-agent.exe") != -1) || (x86 && proc.Name.IndexOf("nunit-agent-x86.exe") != -1))
+        {
           proc.Attach();
+        }
+      }
     }
 
     public static void AttachConsole(DTE dte)
@@ -86,7 +90,7 @@ namespace OpenDriven
       }
     }
 
-    public static void Debug(string fileName, string testWithNamespace, DTE dte)
+    public static void Debug(string fileName, string testWithNamespace, DTE dte, bool x86 = false)
     {
       if (dte.Solution.SolutionBuild.ActiveConfiguration.Name.ToLower().Contains("release"))
       {
@@ -107,6 +111,10 @@ namespace OpenDriven
         if (testWithNamespace=="_PROJECT_")
         {
           arguments = $"{fileName} --debug-agent";
+        }
+        if (x86)
+        {
+          arguments += " --x86";
         }
         System.Diagnostics.Process cmd = new System.Diagnostics.Process();
         cmd.StartInfo.FileName = @"C:\Program Files\OpenDriven\nunit-console-3.8\nunit3-console.exe";
@@ -148,7 +156,7 @@ namespace OpenDriven
           System.Threading.Thread.Sleep(500);
         }
 
-        Attach(dte);
+        Attach(dte, x86);
 
         File.Delete(@"C:\Program Files\OpenDriven\nunit-console-3.8\ReadyToAttach.txt");
       }

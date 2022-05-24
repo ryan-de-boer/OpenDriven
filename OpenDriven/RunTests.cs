@@ -12,7 +12,7 @@ namespace OpenDriven
 {
   internal class RunTests
   {
-    public static string Run(string fileName, string testWithNamespace)
+    public static string Run(string fileName, string testWithNamespace, bool x86 = false)
     {
       System.Diagnostics.Process process;
       if (DebugTests.DotNetFramework(fileName))
@@ -21,6 +21,10 @@ namespace OpenDriven
         if (testWithNamespace == "_PROJECT_")
         {
           arguments = $"{fileName} -result:\"C:\\Program Files\\OpenDriven\\output.xml\";format=nunit2";
+        }
+        if (x86)
+        {
+          arguments += " --x86";
         }
         var processStartInfo = new ProcessStartInfo
         {

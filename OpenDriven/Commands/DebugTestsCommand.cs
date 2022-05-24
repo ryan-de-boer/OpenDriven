@@ -412,7 +412,13 @@ namespace OpenDriven.Commands
 
       Build(_selectedProject1);
 
-      DebugTests.Debug(fileName, testWithNamespace, s_dte);
+      bool isX86 = false;
+      if (File.ReadAllText(@"C:\Program Files\OpenDriven\x86.txt").ToLower() == "true")
+      {
+        isX86 = true;
+      }
+
+      DebugTests.Debug(fileName, testWithNamespace, s_dte, isX86);
  
 
       // Show a message box to prove we were here
