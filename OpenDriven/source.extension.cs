@@ -11,7 +11,7 @@ namespace OpenDriven
         public const string Name = "OpenDriven";
         public const string Description = @"Debugging and running of nunit tests in VS2022 (Similar to TestDriven.NET)";
         public const string Language = "en-US";
-        public const string Version = "0.1424";
+        public const string Version = "0.1426";
         public const string Author = "Ryan De Boer";
         public const string Tags = "";
     }
