@@ -60,6 +60,7 @@
     <Compile Include="Commands\ToolbarDebugLastCommand.cs" />
     <Compile Include="Commands\ToolbarRunLastCommand.cs" />
     <Compile Include="Commands\ToolbarOpenReportPassedCommand.cs" />
+    <Compile Include="CorFlagsReader.cs" />
     <Compile Include="DebugTests.cs" />
     <Compile Include="FailDialog.xaml.cs">
       <DependentUpon>FailDialog.xaml</DependentUpon>

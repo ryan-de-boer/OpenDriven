@@ -1,4 +1,5 @@
-﻿using EnvDTE;
+﻿using ApiChange.Api.Introspection;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using OpenDriven.Commands;
 using System;
@@ -47,6 +48,8 @@ namespace OpenDriven
 
     public static bool DotNetFramework(string fileName)
     {
+      fileName = fileName.Replace("Release", "Debug");
+
       string sub = fileName.Substring(fileName.IndexOf("bin\\Debug\\") + "bin\\Debug\\".Length);
       if (sub.Contains("\\"))
       {
@@ -90,8 +93,14 @@ namespace OpenDriven
       }
     }
 
-    public static void Debug(string fileName, string testWithNamespace, DTE dte, bool x86 = false)
+    public static void Debug(string fileName, string testWithNamespace, DTE dte/*, bool x86 = false*/)
     {
+      bool x86 = false;
+      if (CorFlagsReader.Is32Bit(Path.GetDirectoryName(fileName)))
+      {
+        x86 = true;
+      }
+
       if (dte.Solution.SolutionBuild.ActiveConfiguration.Name.ToLower().Contains("release"))
       {
         VsShellUtilities.ShowMessageBox(

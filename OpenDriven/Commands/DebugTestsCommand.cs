@@ -412,26 +412,26 @@ namespace OpenDriven.Commands
 
       Build(_selectedProject1);
 
-      bool isX86 = false;
+      //bool isX86 = false;
 
-      if (File.Exists(@"C:\Program Files\OpenDriven\x86.txt"))
-      {
-        if (File.ReadAllText(@"C:\Program Files\OpenDriven\x86.txt").ToLower() == "true")
-        {
-          isX86 = true;
-        }
-      }
-      else
-      {
-        string output = RunTests.Run(fileName, testWithNamespace);
-        if (output.Contains("BadImageFormatException"))
-        {
-          isX86 = true;
-        }
-      }
+      //if (File.Exists(@"C:\Program Files\OpenDriven\x86.txt"))
+      //{
+      //  if (File.ReadAllText(@"C:\Program Files\OpenDriven\x86.txt").ToLower() == "true")
+      //  {
+      //    isX86 = true;
+      //  }
+      //}
+      //else
+      //{
+      //  string output = RunTests.Run(fileName, testWithNamespace);
+      //  if (output.Contains("BadImageFormatException"))
+      //  {
+      //    isX86 = true;
+      //  }
+      //}
 
 
-      DebugTests.Debug(fileName, testWithNamespace, s_dte, isX86);
+      DebugTests.Debug(fileName, testWithNamespace, s_dte);
  
 
       // Show a message box to prove we were here

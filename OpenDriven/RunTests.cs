@@ -1,4 +1,5 @@
-﻿using NUnit.Engine.Addins;
+﻿using ApiChange.Api.Introspection;
+using NUnit.Engine.Addins;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,8 +13,14 @@ namespace OpenDriven
 {
   internal class RunTests
   {
-    public static string Run(string fileName, string testWithNamespace, bool x86 = false)
+    public static string Run(string fileName, string testWithNamespace/*, bool x86 = false*/)
     {
+      bool x86 = false;
+      if (CorFlagsReader.Is32Bit(Path.GetDirectoryName(fileName)))
+      {
+        x86 = true;
+      }
+
       System.Diagnostics.Process process;
       if (DebugTests.DotNetFramework(fileName))
       {
