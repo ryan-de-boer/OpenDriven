@@ -50,10 +50,21 @@ namespace OpenDriven
     {
       fileName = fileName.Replace("Release", "Debug");
 
-      string sub = fileName.Substring(fileName.IndexOf("bin\\Debug\\") + "bin\\Debug\\".Length);
-      if (sub.Contains("\\"))
+      if (fileName.Contains("bin\\Debug(XP)\\"))
       {
-        return false;
+        string sub = fileName.Substring(fileName.IndexOf("bin\\Debug(XP)\\") + "bin\\Debug(XP)\\".Length);
+        if (sub.Contains("\\"))
+        {
+          return false;
+        }
+      }
+      else
+      {
+        string sub = fileName.Substring(fileName.IndexOf("bin\\Debug\\") + "bin\\Debug\\".Length);
+        if (sub.Contains("\\"))
+        {
+          return false;
+        }
       }
       return true;
     }

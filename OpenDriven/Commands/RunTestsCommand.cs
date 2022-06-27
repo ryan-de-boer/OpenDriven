@@ -173,7 +173,8 @@ namespace OpenDriven.Commands
 
       File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{fileName}|{testWithNamespace}");
 
-      DebugTestsCommand.Build(_selectedProject1);
+      //Hanging for VIP tests
+      //DebugTestsCommand.Build(_selectedProject1);
 
       //string output = "";
       //if (CorFlagsReader.Is32Bit(Path.GetDirectoryName(fileName))
