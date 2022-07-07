@@ -53,9 +53,9 @@ namespace OpenDriven.Commands
       var menuItem = new MenuCommand(this.Execute, menuCommandID);
       commandService.AddCommand(menuItem);
 
- //     RestartServer();
+      //     RestartServer();
     }
-    
+
     //static SocketServer server;
     //private void RestartServer()
     //{
@@ -85,7 +85,7 @@ namespace OpenDriven.Commands
     //          // in use
     //        }
     //      }
-       
+
 
     //    server.Received += Server_Received;
     //    server.Start();
@@ -224,21 +224,34 @@ namespace OpenDriven.Commands
 
 
     public static string GetAssemblyPath(EnvDTE.Project vsProject)
-
     {
       ThreadHelper.ThrowIfNotOnUIThread();
-      string fullPath = vsProject.Properties.Item("FullPath").Value.ToString();
+      try
+      {
+        const string VsProjectItemKindSolutionFolder = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
+        const string VsProjectKindMisc = "{66A2671D-8FB5-11D2-AA7E-00C04F688DDE}";
+        if (vsProject.Kind == VsProjectItemKindSolutionFolder ||
+          vsProject.Kind == VsProjectKindMisc)
+        {
+          return "";
+        }
 
-      string outputPath = vsProject.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
+        string fullPath = vsProject.Properties.Item("FullPath").Value.ToString();
 
-      string outputDir = Path.Combine(fullPath, outputPath);
+        string outputPath = vsProject.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
 
-      string outputFileName = vsProject.Properties.Item("OutputFileName").Value.ToString();
+        string outputDir = Path.Combine(fullPath, outputPath);
 
-      string assemblyPath = Path.Combine(outputDir, outputFileName);
+        string outputFileName = vsProject.Properties.Item("OutputFileName").Value.ToString();
 
-      return assemblyPath;
+        string assemblyPath = Path.Combine(outputDir, outputFileName);
 
+        return assemblyPath;
+      }
+      catch (Exception ex)
+      {
+        return "";
+      }
     }
 
     public static bool sm_escape = false;
