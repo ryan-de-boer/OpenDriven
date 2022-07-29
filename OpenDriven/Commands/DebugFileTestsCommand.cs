@@ -168,7 +168,17 @@ namespace OpenDriven.Commands
 
         DebugTests.PreDebug();
 
-        DebugTestsCommand.Build(_selectedProject1);
+        if (!DebugTestsCommand.Build(_selectedProject1))
+        {
+          VsShellUtilities.ShowMessageBox(
+            this.package,
+            DebugTestsCommand.BuildErrorMessage,
+            DebugTestsCommand.BuildErrorTitle,
+            DebugTestsCommand.BuildErrorIcon,
+            OLEMSGBUTTON.OLEMSGBUTTON_OK,
+            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          return;
+        }
 
         DebugTests.Debug(fileName, joinString, DebugTestsCommand.s_dte);
 

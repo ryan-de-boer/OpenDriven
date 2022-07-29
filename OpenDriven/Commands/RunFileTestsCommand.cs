@@ -328,7 +328,17 @@ namespace OpenDriven.Commands
       string classWithNamespace = DebugTestsCommand.ExtractNamespaceClass(File.ReadAllText(itemFullPath));
       File.WriteAllText(@"C:\Program Files\OpenDriven\LastRunTest.txt", $"{fileName}|{classWithNamespace}");
 
-      DebugTestsCommand.Build(_selectedProject1);
+      if (!DebugTestsCommand.Build(_selectedProject1))
+      {
+        VsShellUtilities.ShowMessageBox(
+          this.package,
+          DebugTestsCommand.BuildErrorMessage,
+          DebugTestsCommand.BuildErrorTitle,
+          DebugTestsCommand.BuildErrorIcon,
+          OLEMSGBUTTON.OLEMSGBUTTON_OK,
+          OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        return;
+      }
 
       string output = RunTests.Run(fileName, classWithNamespace);
 

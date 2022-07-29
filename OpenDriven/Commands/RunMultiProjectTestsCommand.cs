@@ -255,7 +255,18 @@ namespace OpenDriven.Commands
 
         foreach (EnvDTE.Project project in _projects)
         {
-          DebugTestsCommand.Build(project);
+          if (!DebugTestsCommand.Build(project))
+          {
+            VsShellUtilities.ShowMessageBox(
+              this.package,
+              DebugTestsCommand.BuildErrorMessage,
+              DebugTestsCommand.BuildErrorTitle,
+              DebugTestsCommand.BuildErrorIcon,
+              OLEMSGBUTTON.OLEMSGBUTTON_OK,
+              OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            return;
+          }
+          //DebugTestsCommand.Build(project);
         }
       }
 

@@ -297,7 +297,7 @@ namespace OpenDriven.Commands
       return textBox.Text;
     }
 
-    public static void Build(EnvDTE.Project _selectedProject1)
+    public static bool Build(EnvDTE.Project _selectedProject1)
     {
       Solution2 soln = (Solution2)s_dte.Solution;
       SolutionBuild2 sb = (SolutionBuild2)soln.SolutionBuild;
@@ -332,7 +332,13 @@ namespace OpenDriven.Commands
         owp.OutputString("Building the project in debug mode...");
       }
       sb.BuildProject("Debug", _selectedProject1.FullName, true);
+      return sb.LastBuildInfo == 0; // LastBuildInfo = number of projects that failed to build. https://docs.microsoft.com/en-us/dotnet/api/envdte80.solutionbuild2?view=visualstudiosdk-2022
     }
+
+    public static string BuildErrorMessage = "Build failed, can't run test(s)";
+    public static string BuildErrorTitle = "Build Failure";
+    public static OLEMSGICON BuildErrorIcon = OLEMSGICON.OLEMSGICON_CRITICAL;
+
 
     public static string ExtractNamespaceTest(string text)
     {
@@ -423,7 +429,17 @@ namespace OpenDriven.Commands
 
       DebugTests.PreDebug();
 
-      Build(_selectedProject1);
+      if (!DebugTestsCommand.Build(_selectedProject1))
+      {
+        VsShellUtilities.ShowMessageBox(
+          this.package,
+          DebugTestsCommand.BuildErrorMessage,
+          DebugTestsCommand.BuildErrorTitle,
+          DebugTestsCommand.BuildErrorIcon,
+          OLEMSGBUTTON.OLEMSGBUTTON_OK,
+          OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        return;
+      }
 
       //bool isX86 = false;
 
