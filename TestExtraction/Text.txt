@@ -11,7 +11,7 @@ namespace Hardware.Graphics.Tests.UnitTests
   /// </summary>
   [TestFixture]
   [Category("Unit")]
-  public class GfxUnitTests
+  public class GfxUnitTests : IInterface
   {
     /// <summary>
     /// Tests that we can read from a file. 

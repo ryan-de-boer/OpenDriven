@@ -354,6 +354,10 @@ namespace OpenDriven.Commands
       string className = text.Substring(text.IndexOf("public class"));
       className = className.Substring("public class".Length);
       className = className.Substring(0, className.IndexOf("\n")).Trim();
+      if (className.IndexOf(":") != -1)
+      {
+        className = className.Substring(0, className.IndexOf(":")).Trim();
+      }
 
       if (text.LastIndexOf("[Test]") == -1)
       {

@@ -15,6 +15,7 @@ namespace TestExtraction
     {
       //     string "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.5.Tests\\bin\\Debug\\net5.0\\OpenDriven.5.Tests.dll"
 
+      /*
       string dn5 = "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.5.Tests\\bin\\Debug\\net5.0\\OpenDriven.5.Tests.dll";
       string framwork = "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Framework48.Tests\\bin\\Debug\\OpenDriven.Framework48.Tests.dll";
       string netstandard = "D:\\code\\other\\OpenDriven\\git\\OpenDriven\\OpenDriven.Standard21.Tests\\bin\\Debug\\netstandard2.1\\OpenDriven.Standard21.Tests.dll";
@@ -26,6 +27,10 @@ namespace TestExtraction
       bool s2 = DotNetStandard(dn5);
       bool f = DotNetFramework(framwork);
       bool f2 = NewDotNet(framwork);
+      */
+
+      TestExtraction();
+
       int v = 1;
       v++;
     }
@@ -179,6 +184,10 @@ namespace TestExtraction
       string className = text.Substring(text.IndexOf("public class"));
       className = className.Substring("public class".Length);
       className = className.Substring(0, className.IndexOf("\n")).Trim();
+      if (className.IndexOf(":") != -1)
+      {
+        className = className.Substring(0, className.IndexOf(":")).Trim();
+      }
 
       string testName = text.Substring(text.LastIndexOf("[Test]"));
       testName = testName.Substring(testName.IndexOf("public void"));
